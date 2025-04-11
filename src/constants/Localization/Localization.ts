@@ -6,7 +6,8 @@ logOut:"خروج از حساب کاربری"
 }
 
 export const headerLocalization = {
-    admin:"مدیر"
+    admin:"مدیر",
+    warning:"خطا در دریافت اطلاعات"
 }
 
 export const logInLocalization = {
