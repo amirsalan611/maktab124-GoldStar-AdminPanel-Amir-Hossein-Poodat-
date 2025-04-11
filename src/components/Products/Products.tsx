@@ -3,21 +3,24 @@ import { GetProducts } from "../../services/auth/GetProducts/GetProducts";
 import Loader2 from "../Loading/Loading2";
 import Table from "../shared/Table/Table";
 import { productPageLocalization } from "../../constants/Localization/Localization";
-
+interface Column {
+  key: string;
+  label: string;
+}
 interface table {
   products: [];
-  columns: string[];
+  columns: Column[];
 }
 
 export default function Products() {
   const [tableData, setTableData] = useState<table>({
     products: [],
     columns: [
-      productPageLocalization.image,
-      productPageLocalization.name,
-      productPageLocalization.price,
-      productPageLocalization.count,
-      productPageLocalization.action,
+      { key: "image", label: productPageLocalization.image },
+      { key: "productName", label: productPageLocalization.name },
+      { key: "productPrice", label: productPageLocalization.price },
+      { key: "productCount", label: productPageLocalization.count },
+      { key: "action", label: productPageLocalization.action },
     ],
   });
 
@@ -56,13 +59,13 @@ export default function Products() {
   }
 
   return (
-    <div className="p-10">
+    <div className="p-10 w-full">
       {tableData.products.length < 1 ? (
         <p className="text-2xl">{productPageLocalization.noProduct}</p>
       ) : (
         <>
-          <p>{productPageLocalization.prodctList}</p>
-          <Table data={tableData.products} columns={tableData.columns} />
+          <p className="text-3xl mb-5 text-center">{productPageLocalization.prodctList}</p>
+          <Table data={tableData.products} columns={tableData.columns}/>
         </>
       )}
     </div>

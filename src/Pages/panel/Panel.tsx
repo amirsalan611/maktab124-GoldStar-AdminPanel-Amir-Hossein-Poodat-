@@ -26,7 +26,7 @@ export default function Panel() {
   }
 
   return (
-    <div className="flex gap-10">
+    <div className="flex">
       <Aside />
       <div className="w-full flex flex-col items-center">
         <Header />

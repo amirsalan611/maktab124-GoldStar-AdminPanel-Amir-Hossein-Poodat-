@@ -30,17 +30,17 @@ export default function Header() {
 
   if (loading)
     return (
-      <div className="p-5">
+      <div className="p-5  bg-gray-100 shadow-sm w-full">
         <Loader />
       </div>
     );
-  if (error) return <div className="">
+  if (error) return <div className=" bg-gray-100 shadow-sm w-full">
     <img src={warning} alt="warning" className="w-32 py-2" />
     <p>{headerLocalization.warning}</p>
   </div>;
 
   return (
-    <div dir="ltr" className="p-5 flex gap-2 self-end">
+    <div dir="ltr" className="p-5 flex gap-2 self-end bg-gray-100 shadow-sm w-full">
       <div className="w-14 border border-black rounded-full overflow-hidden">
         <img
           src={BASE_URL + adminBio.image || "https://via.placeholder.com/150"}
