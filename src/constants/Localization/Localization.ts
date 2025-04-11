@@ -23,3 +23,13 @@ export const logInLocalization = {
 export const inputLocalization = {
     text : "لطفا این قسمت را پر نمایید !"
 }
+
+export const productPageLocalization = {
+    prodctList:"لیست محصولات",
+    noProduct:"محصولی یافت نشد",
+    image:"تصویر",
+    name:"نام",
+    price:"قیمت",
+    count:"تعداد موجود",
+    action:"اقدامات"
+}
