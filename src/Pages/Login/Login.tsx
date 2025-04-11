@@ -27,7 +27,7 @@ export default function Login() {
     setErrors({ ...errors, [e.target.name]: false });
   };
 
-  const handleSubmit = async (e: React.FormEvent) => {
+  const handleSubmit = async(e: React.FormEvent) => {
     e.preventDefault();
 
     if (!formData.email || !formData.password) {
@@ -40,7 +40,7 @@ export default function Login() {
     }
 
     try {
-      const result = await LoginAdmin(formData.email, formData.password);
+      const result =await LoginAdmin(formData.email, formData.password);
 
       if (result.status === 200) {
         localStorage.setItem("token", result.data.accessToken);
@@ -49,7 +49,7 @@ export default function Login() {
         navigate("/panel");
       }
     } catch (error: any) {
-      if (error.status === 401) {
+      if (error?.status === 401) {
         setErrors({ ...errors, incorrect: true });
       }
       toast.error(logInLocalization.error);
@@ -59,7 +59,7 @@ export default function Login() {
   return (
     <div className="flex flex-col items-center bg-slate-50 justify-center h-screen ">
       <div className="w-[30%] flex flex-col shadow-xl bg-slate-200 px-16 pb-10 rounded-xl relative">
-      <p className="m-auto p-10 text-2xl">{logInLocalization.login}</p>
+        <p className="m-auto p-10 text-2xl">{logInLocalization.login}</p>
         <div className="w-[250px] absolute left-[-110px] top-[-110px]">
           <img src={logIn} alt="loginGif" />
         </div>

@@ -47,6 +47,9 @@ export default function Products() {
     fetchGetProducts();
   }, []);
 
+  const handleDelete= ()=>{
+    
+  }
   if (handlePage.loading) {
     return (
       <div>
@@ -65,7 +68,7 @@ export default function Products() {
       ) : (
         <>
           <p className="text-3xl mb-5 text-center">{productPageLocalization.prodctList}</p>
-          <Table data={tableData.products} columns={tableData.columns}/>
+          <Table data={tableData.products} columns={tableData.columns} onDelete={handleDelete} onEdit={handleedit}/>
         </>
       )}
     </div>

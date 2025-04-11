@@ -2,7 +2,8 @@ export const asidebarlocalization={
 products:"محصولات",
 orders:"سفارشات",
 users:"کاربران",
-logOut:"خروج از حساب کاربری"
+logOut:"خروج از حساب کاربری",
+inventory:"موجودی"
 }
 
 export const headerLocalization = {

@@ -1,4 +1,5 @@
 import React from "react";
+import { MdDeleteForever, MdEditSquare } from "react-icons/md";
 
 interface Column {
   key: string;
@@ -8,17 +9,22 @@ interface Column {
 interface TableProps {
   data: any[];
   columns: Column[];
-}
+  onDelete: (id: string) => void;
+  onEdit: (id: string) => void;
+};
 
-const Table: React.FC<TableProps> = ({ data, columns }) => {
-  console.log(data)
+const Table: React.FC<TableProps> = ({ data, columns, onDelete, onEdit }) => {
+  console.log(data);
   return (
     <div className="overflow-y-auto">
       <table className="table-auto border-collapse w-full border rounded-xl shadow-sm">
         <thead className="">
           <tr>
             {columns.map((column, index) => (
-              <th key={index} className="px-4 py-2 border-b border-x text-center">
+              <th
+                key={index}
+                className="px-4 py-2 border-b border-x text-center"
+              >
                 {column.label}
               </th>
             ))}
@@ -43,9 +49,21 @@ const Table: React.FC<TableProps> = ({ data, columns }) => {
                         className="w-10 h-10 object-cover m-auto"
                       />
                     ) : column.key === "action" ? (
-                      <button className="text-blue-500 underline">
-                        ویرایش
-                      </button>
+                      <div>
+                        {" "}
+                        <button
+                          className="text-blue-500 underline"
+                          onClick={() => onDelete?.(row.id)}
+                        >
+                          <MdDeleteForever className="text-red-500 text-2xl" />
+                        </button>
+                        <button
+                          className="text-blue-500 underline"
+                          onClick={()=>onEdit?.(row.id)}
+                        >
+                          <MdEditSquare className="text-blue-500 text-xl mr-2" />
+                        </button>
+                      </div>
                     ) : (
                       row[column.key]
                     )}

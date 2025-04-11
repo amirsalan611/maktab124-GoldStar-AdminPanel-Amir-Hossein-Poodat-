@@ -5,7 +5,7 @@ import { asidebarlocalization } from "../../constants/Localization/Localization"
 import { AiFillProduct } from "react-icons/ai";
 import { useNavigate } from "react-router-dom";
 import { BiSolidMessageDetail } from "react-icons/bi";
-import { FaUsers } from "react-icons/fa";
+import { FaDropbox, FaUsers } from "react-icons/fa";
 import { CiLogout } from "react-icons/ci";
 
 export default function Aside() {
@@ -35,6 +35,15 @@ export default function Aside() {
         >
           <AiFillProduct />
           <p>{asidebarlocalization.products}</p>
+        </button>
+        <button
+          className={`flex items-center justify-center gap-2 py-1 rounded-lg w-full ${
+            activeComponent === "inventory" ? "bg-gray-400 text-white" : ""
+          }`}
+          onClick={() => setActiveComponent("inventory")}
+        >
+          <FaDropbox />
+          <p>{asidebarlocalization.inventory}</p>
         </button>
         <button
           className={`flex items-center justify-center gap-2 px-4 py-1 rounded-lg w-full ${

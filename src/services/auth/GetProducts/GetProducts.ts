@@ -5,7 +5,7 @@ export const GetProducts = async () => {
     try {
         const response = await axios.get(`${BASE_URL}/api/records/products`, {
           headers: {
-            api_key: API_KEY,
+            // api_key: API_KEY,
             Authorization: `Bearer ${localStorage.getItem("token")}`
           },
         });

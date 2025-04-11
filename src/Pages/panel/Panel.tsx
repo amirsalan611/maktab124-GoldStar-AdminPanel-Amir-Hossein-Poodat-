@@ -6,6 +6,7 @@ import Orders from "../../components/Orders/Orders";
 import Products from "../../components/Products/Products";
 import Users from "../../components/Users/Users";
 import AddAndEdit from "../../components/Add&EditProduct/Add&EditProduct";
+import Inventory from "../../components/Inventory/Inventory";
 
 export default function Panel() {
   const asideContext = useContext(AsideContext);
@@ -22,6 +23,8 @@ export default function Panel() {
         return <Users />;
       case "AddAndEdit":
         return <AddAndEdit />;
+        case "inventory":
+          return <Inventory/>
     }
   }
 
