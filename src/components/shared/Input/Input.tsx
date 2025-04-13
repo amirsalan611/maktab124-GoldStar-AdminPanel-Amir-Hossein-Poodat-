@@ -57,7 +57,7 @@ const StyledWrapper = styled.div`
 
   .inputGroup input {
     font-size: 100%;
-    padding: 0.8em 2.5em 0.8em 0.8em; // فضای سمت راست برای آیکون
+    padding: 0.8em 2.5em 0.8em 0.8em;
     outline: none;
     border: 2px solid rgb(200, 200, 200);
     background-color: transparent;

@@ -27,7 +27,7 @@ export default function Login() {
     setErrors({ ...errors, [e.target.name]: false });
   };
 
-  const handleSubmit = async(e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
 
     if (!formData.email || !formData.password) {
@@ -40,10 +40,14 @@ export default function Login() {
     }
 
     try {
-      const result =await LoginAdmin(formData.email, formData.password);
-
+      const result = await LoginAdmin(formData.email, formData.password);
+      console.log(result.data);
       if (result.status === 200) {
-        localStorage.setItem("token", result.data.accessToken);
+        localStorage.setItem("token", result.data.token.accessToken);
+        localStorage.setItem(
+          "adminData",
+          JSON.stringify(result.data.data.user)
+        );
         toast.success(logInLocalization.success);
         setErrors({ ...errors, incorrect: false });
         navigate("/panel");

@@ -16,10 +16,10 @@ export default function Products() {
   const [tableData, setTableData] = useState<table>({
     products: [],
     columns: [
-      { key: "image", label: productPageLocalization.image },
-      { key: "productName", label: productPageLocalization.name },
-      { key: "productPrice", label: productPageLocalization.price },
-      { key: "productCount", label: productPageLocalization.count },
+      { key: "images", label: productPageLocalization.image },
+      { key: "name", label: productPageLocalization.name },
+      { key: "price", label: productPageLocalization.price },
+      { key: "quantity", label: productPageLocalization.count },
       { key: "action", label: productPageLocalization.action },
     ],
   });
@@ -35,7 +35,7 @@ export default function Products() {
         const products = await GetProducts();
         setTableData((prev) => ({
           ...prev,
-          products: products.records,
+          products: products,
         }));
         console.log(products.records);
         setHandelPage({ ...handlePage, loading: false });
@@ -50,6 +50,7 @@ export default function Products() {
   const handleDelete= ()=>{
     
   }
+    const handleedit = () => {};
   if (handlePage.loading) {
     return (
       <div>

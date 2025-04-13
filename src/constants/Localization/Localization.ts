@@ -32,5 +32,6 @@ export const productPageLocalization = {
     name:"نام",
     price:"قیمت",
     count:"تعداد موجود",
-    action:"اقدامات"
+    action:"اقدامات",
+    toman:"تومان"
 }
