@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import { GetUsers } from "../../services/auth/GetUsers/GerUsers";
 import Table from "../shared/Table/Table";
-import { productPageLocalization, usersLocalization } from "../../constants/Localization/Localization";
+import { usersLocalization } from "../../constants/Localization/Localization";
 
 interface Column {
   key: string;
