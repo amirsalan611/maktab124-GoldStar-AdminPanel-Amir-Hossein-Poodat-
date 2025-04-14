@@ -30,8 +30,40 @@ export const productPageLocalization = {
     noProduct:"محصولی یافت نشد",
     image:"تصویر",
     name:"نام",
-    price:"قیمت",
+    status:"وضعیت محصول",
     count:"تعداد موجود",
+    price:"قیمت",
     action:"اقدامات",
-    toman:"تومان"
+    toman:"تومان",
+    is:"موجود",
+    not:"ناموجود"
 }
+
+export const inventoryLocalization ={
+    inventory:"لیست موجودی"
+}
+
+export const ordersLocalization = {
+  user: "نام کاربر",
+  totalPrice: "مجموع سفارش",
+  deliveryDate: "تاریخ ارسال",
+  deliveryStatus: "وضعیت ارسال",
+  action: "اقدامات",
+  noOrder: "سفارشی یافت نشد",
+  orders:"لیست سفارشات",
+  sending:"درحال ارسال",
+  sended:"ارسال شده"
+};
+
+export const usersLocalization = {
+  userPage: "لیست کاربران",
+  firstName: "نام",
+  lastName: "نام  خانوادگی",
+  userName: "نام کاربری",
+  phoneNumber: "شماره تلفن",
+  role: "سمت",
+  noUser: "کاربری یافت نشد",
+  action: "اقدامات",
+  user:"کاربر",
+  admin:"مدیر"
+};

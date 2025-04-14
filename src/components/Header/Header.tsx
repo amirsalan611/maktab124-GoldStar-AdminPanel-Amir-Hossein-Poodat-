@@ -22,8 +22,6 @@ try {
 }
   }, []);
 
-  console.log(adminData);
-
   if (loading)
     return (
       <div className="p-5 bg-gray-100 shadow-sm w-full ">

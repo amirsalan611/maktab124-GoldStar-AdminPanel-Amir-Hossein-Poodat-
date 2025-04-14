@@ -48,9 +48,9 @@ export default function Aside() {
         </button>
         <button
           className={`flex items-center justify-center gap-2 px-4 py-1 rounded-lg w-full ${
-            activeComponent === "order" ? "bg-gray-400 text-white" : ""
+            activeComponent === "orders" ? "bg-gray-400 text-white" : ""
           }`}
-          onClick={() => setActiveComponent("order")}
+          onClick={() => setActiveComponent("orders")}
         >
           <BiSolidMessageDetail />
           <p>{asidebarlocalization.orders}</p>

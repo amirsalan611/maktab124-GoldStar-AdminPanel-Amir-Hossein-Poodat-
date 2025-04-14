@@ -3,6 +3,7 @@ import { GetProducts } from "../../services/auth/GetProducts/GetProducts";
 import Loader2 from "../Loading/Loading2";
 import Table from "../shared/Table/Table";
 import { productPageLocalization } from "../../constants/Localization/Localization";
+
 interface Column {
   key: string;
   label: string;
@@ -18,7 +19,7 @@ export default function Products() {
     columns: [
       { key: "images", label: productPageLocalization.image },
       { key: "name", label: productPageLocalization.name },
-      { key: "price", label: productPageLocalization.price },
+      { key: "status", label: productPageLocalization.status },
       { key: "quantity", label: productPageLocalization.count },
       { key: "action", label: productPageLocalization.action },
     ],
@@ -37,7 +38,6 @@ export default function Products() {
           ...prev,
           products: products,
         }));
-        console.log(products.records);
         setHandelPage({ ...handlePage, loading: false });
       } catch (error) {
         console.log(error);
@@ -63,9 +63,9 @@ export default function Products() {
   }
 
   return (
-    <div className="p-10 w-full">
+    <div className="p-10 w-full h-full">
       {tableData.products.length < 1 ? (
-        <p className="text-2xl">{productPageLocalization.noProduct}</p>
+        <p className="text-2xl text-center">{productPageLocalization.noProduct}</p>
       ) : (
         <>
           <p className="text-3xl mb-5 text-center">{productPageLocalization.prodctList}</p>
