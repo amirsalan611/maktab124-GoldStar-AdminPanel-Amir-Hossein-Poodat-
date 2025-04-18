@@ -96,6 +96,7 @@ export default function Login() {
             buttonText={logInLocalization.submit}
             type="submit"
             className="self-center"
+            buttonClassName="px-5 py-3"
           />
         </form>
       </div>

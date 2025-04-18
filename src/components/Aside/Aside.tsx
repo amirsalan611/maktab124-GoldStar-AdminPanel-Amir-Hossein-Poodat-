@@ -1,5 +1,4 @@
 import { useContext, useEffect, useState } from "react";
-import goldstar from "../../assets/images/goldStar.jpg";
 import AsideContext from "../Context/Context";
 import { asidebarlocalization, headerLocalization } from "../../constants/Localization/Localization";
 import { AiFillProduct } from "react-icons/ai";
