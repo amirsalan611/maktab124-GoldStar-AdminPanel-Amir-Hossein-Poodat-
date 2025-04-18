@@ -1,18 +1,22 @@
 import { useEffect, useState } from "react";
 import { GetProducts } from "../../services/auth/GetProducts/GetProducts";
 import Loader2 from "../Loading/Loading2";
-import Table from "../shared/Table/Table";
-import { inventoryLocalization, productPageLocalization } from "../../constants/Localization/Localization";
+import {
+  inventoryLocalization,
+  productPageLocalization,
+} from "../../constants/Localization/Localization";
+import MuiTable from "../shared/Table/Table";
+
 interface Column {
   key: string;
   label: string;
 }
 interface table {
-  products: [];
+  products: any[];
   columns: Column[];
 }
 
-export default function inventory() {
+export default function Inventory() {
   const [tableData, setTableData] = useState<table>({
     products: [],
     columns: [
@@ -24,6 +28,9 @@ export default function inventory() {
     ],
   });
 
+  const [allProducts, setAllProducts] = useState<any[]>([]);
+  const [searchValue, setSearchValue] = useState("");
+
   const [handlePage, setHandelPage] = useState({
     loading: true,
     error: false,
@@ -33,7 +40,11 @@ export default function inventory() {
     const fetchGetProducts = async () => {
       try {
         const products = await GetProducts();
-        const filteredProducts = products.filter((product:any) =>product.quantity >= 1)
+        console.log(products)
+        const filteredProducts = products.filter(
+          (product: any) => product.quantity >= 1
+        );
+        setAllProducts(filteredProducts);
         setTableData((prev) => ({
           ...prev,
           products: filteredProducts,
@@ -47,8 +58,22 @@ export default function inventory() {
     fetchGetProducts();
   }, []);
 
+  const handleSearch = (value: string) => {
+    setSearchValue(value);
+
+    const filtered = allProducts.filter((product: any) =>
+      product.name?.toLowerCase().includes(value.toLowerCase())
+    );
+
+    setTableData((prev) => ({
+      ...prev,
+      products: filtered,
+    }));
+  };
+
   const handleDelete = () => {};
   const handleedit = () => {};
+
   if (handlePage.loading) {
     return (
       <div>
@@ -56,29 +81,33 @@ export default function inventory() {
       </div>
     );
   }
+
   if (handlePage.error) {
     return <div></div>;
   }
 
   return (
-    <div className="p-10 w-full h-full">
-      {tableData.products.length < 1 ? (
-        <p className="text-2xl text-center">
-          {productPageLocalization.noProduct}
-        </p>
-      ) : (
-        <>
-          <p className="text-3xl mb-5 text-center">
+    <div className="p-10 pt-2 w-full h-full">
+      <div className="flex flex-col items-center">
+        <div className="flex items-center w-full gap-5 px-10">
+          <p className="text-3xl text-center">
             {inventoryLocalization.inventory}
           </p>
-          <Table
-            data={tableData.products}
-            columns={tableData.columns}
-            onDelete={handleDelete}
-            onEdit={handleedit}
+          <input
+            type="text"
+            value={searchValue}
+            onChange={(e) => handleSearch(e.target.value)}
+            className="border w-[350px] border-gray-400 outline-none rounded-md my-5 py-2 px-5"
+            placeholder="search by product name"
           />
-        </>
-      )}
+        </div>
+        <MuiTable
+          data={tableData.products}
+          columns={tableData.columns}
+          onDelete={handleDelete}
+          onEdit={handleedit}
+        />
+      </div>
     </div>
   );
 }

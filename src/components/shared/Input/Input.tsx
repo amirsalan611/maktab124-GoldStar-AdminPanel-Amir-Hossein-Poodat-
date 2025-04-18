@@ -13,9 +13,10 @@ interface IProps {
   value: string;
   onchange: (e: React.ChangeEvent<HTMLInputElement>) => void;
   error: boolean;
+  className?:string;
 }
 
-const Input = ({ label, inputType, name, value, onchange, error }: IProps) => {
+const Input = ({ label, inputType, name, value, onchange, error, className}: IProps) => {
   const [showPassword, setShowPassword] = useState(false);
   const isPassword = inputType === "password";
 
@@ -32,6 +33,7 @@ const Input = ({ label, inputType, name, value, onchange, error }: IProps) => {
           name={name}
           value={value}
           onChange={onchange}
+          className={className}
         />
         <label htmlFor={name}>{label}</label>
 
@@ -90,7 +92,7 @@ const StyledWrapper = styled.div`
 
   .toggle-password {
     position: absolute;
-    top: 50%;
+    top: 27px;
     left: 10px;
     transform: translateY(-50%);
     cursor: pointer;
