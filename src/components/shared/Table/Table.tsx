@@ -1,16 +1,29 @@
-import React from "react";
+import * as React from "react";
+import {
+  Table,
+  TableBody,
+  TableCell,
+  TableContainer,
+  TableHead,
+  TablePagination,
+  TableRow,
+  Paper,
+  IconButton,
+} from "@mui/material";
 import { MdDeleteForever, MdEditSquare } from "react-icons/md";
 import {
   ordersLocalization,
   productPageLocalization,
+  tableLocalization,
   usersLocalization,
 } from "../../../constants/Localization/Localization";
 import moment from "moment-jalaali";
 
-
 interface Column {
   key: string;
   label: string;
+  minWidth?: number;
+  align?: "right" | "left" | "center";
 }
 
 interface TableProps {
@@ -20,127 +33,209 @@ interface TableProps {
   onEdit: (id: string) => void;
 }
 
-const Table: React.FC<TableProps> = ({ data, columns, onDelete, onEdit }) => {
-  return (
-    <div className="overflow-y-auto font-sans border border-gray-400 rounded-xl max-h-[80%]">
-      <table className="table-auto border-collapse w-full shadow-sm">
-        <thead className="">
-          <tr>
-            {columns.map((column, index) => (
-              <th
-                key={index}
-                className="px-4 py-2 border-b border-x border-gray-400 text-center"
-              >
-                {column.label}
-              </th>
-            ))}
-          </tr>
-        </thead>
-        <tbody>
-          {data.length === 0 ? (
-            <tr>
-              <td colSpan={columns.length} className="px-4 py-2">
-                No data available
-              </td>
-            </tr>
-          ) : (
-            data.map((row, rowIndex) => (
-              <tr
-                key={rowIndex}
-                className={`text-center hover:bg-gray-100 ${
-                  row.deliveryStatus === true || row.quantity === 0
-                    ? "bg-red-100"
-                    : row.deliveryStatus === false
-                    ? "bg-green-100"
-                    : ""
-                }`}
-              >
-                {columns.map((column, colIndex) => (
-                  <td
-                    key={colIndex}
-                    className="px-4 py-2 border-b border-x border-gray-400"
-                  >
-                    {column.key === "images" ? (
-                      <img
-                        src={`http://${row.images[0]}`}
-                        alt="product"
-                        className="w-10 h-10 object-cover m-auto"
-                      />
-                    ) : column.key === "action" ? (
-                      <div>
-                        <button
-                          className="text-blue-500 underline"
-                          onClick={() => onDelete?.(row.id)}
-                        >
-                          <MdDeleteForever className="text-red-500 text-2xl" />
-                        </button>
-                        <button
-                          className="text-blue-500 underline"
-                          onClick={() => onEdit?.(row.id)}
-                        >
-                          <MdEditSquare className="text-blue-500 text-xl mr-2" />
-                        </button>
-                      </div>
-                    ) : column.key === "price" ? (
-                      <div className="flex justify-center items-center gap-2">
-                        <p>{row.price.toLocaleString()}</p>
-                        <p className="text-[15px]">
-                          {productPageLocalization.toman}
-                        </p>
-                      </div>
-                    ) : column.key === "status" ? (
-                      <div className="flex justify-center items-center gap-2">
-                        {row.quantity >= 1 ? (
-                          <p>{productPageLocalization.is}</p>
-                        ) : (
-                          <p>{productPageLocalization.not}</p>
-                        )}
-                      </div>
-                    ) : column.key === "user" ? (
-                      <p>{row.user.username}</p>
-                    ) : column.key === "totalPrice" ? (
-                      <div className="flex justify-center items-center gap-2">
-                        <p>{row.totalPrice.toLocaleString()}</p>
-                        <p className="text-[15px]">
-                          {productPageLocalization.toman}
-                        </p>
-                      </div>
-                    ) : column.key === "deliveryStatus" ? (
-                      <div>
-                        {row.deliveryStatus === true ? (
-                          <p>{ordersLocalization.sending}</p>
-                        ) : (
-                          <p>{ordersLocalization.sended}</p>
-                        )}
-                      </div>
-                    ) : column.key === "role" ? (
-                      <div>
-                        {row.role === "user" ? (
-                          <p>{usersLocalization.user}</p>
-                        ) : (
-                          <p>{usersLocalization.admin}</p>
-                        )}
-                      </div>
-                    ) : column.key === "deliveryDate" ? (
-                      <p>
-                        {row.deliveryDate
-                          ? moment(row.deliveryDate)
-                              .locale("fa")
-                              .format("jYYYY/jMM/jDD")
-                          : "-"}
-                      </p>
-                    ) : (
-                      row[column.key]
-                    )}
-                  </td>
-                ))}
-              </tr>
-            ))
-          )}
-        </tbody>
-      </table>
-    </div>
-  );
+const formatCell = (
+  row: any,
+  key: string,
+  onDelete: (id: string) => void,
+  onEdit: (id: string) => void
+) => {
+  switch (key) {
+    case "images":
+      return (
+        <img
+          src={`http://${row.images[0]}`}
+          alt="product"
+          style={{ width: 40, height: 40, objectFit: "cover" }}
+          className="m-auto"
+        />
+      );
+    case "action":
+      return (
+        <div style={{ display: "flex", gap: 8, justifyContent: "center" }}>
+          <IconButton onClick={() => onDelete(row.id)}>
+            <MdDeleteForever color="red" />
+          </IconButton>
+          <IconButton onClick={() => onEdit(row.id)}>
+            <MdEditSquare color="blue" />
+          </IconButton>
+        </div>
+      );
+    case "price":
+    case "totalPrice":
+      return (
+        <span>
+          {row[key].toLocaleString()} {productPageLocalization.toman}
+        </span>
+      );
+    case "status":
+      return row.quantity >= 1
+        ? productPageLocalization.is
+        : productPageLocalization.not;
+    case "user":
+      return row.user?.username || "-";
+    case "role":
+      return row.role === "user"
+        ? usersLocalization.user
+        : usersLocalization.admin;
+    case "deliveryStatus":
+      return row.deliveryStatus
+        ? ordersLocalization.sending
+        : ordersLocalization.sended;
+    case "deliveryDate":
+      return row.deliveryDate
+        ? moment(row.deliveryDate).locale("fa").format("jYYYY/jMM/jDD")
+        : "-";
+    default:
+      return row[key];
+  }
 };
 
-export default Table;
+export default function MuiTable({
+  data,
+  columns,
+  onDelete,
+  onEdit,
+}: TableProps) {
+  const [page, setPage] = React.useState(0);
+  const [rowsPerPage, setRowsPerPage] = React.useState(10);
+
+  const handleChangePage = (_: unknown, newPage: number) => {
+    setPage(newPage);
+  };
+
+  const handleChangeRowsPerPage = (
+    event: React.ChangeEvent<HTMLInputElement>
+  ) => {
+    setRowsPerPage(+event.target.value);
+    setPage(0);
+  };
+
+  return (
+    <Paper
+      sx={{
+        width: "100%",
+        overflow: "hidden",
+        borderRadius: "20px",
+        border: "1px solid #ccc",
+      }}
+    >
+      <TableContainer sx={{ maxHeight: 640 }}>
+        <Table stickyHeader className="border-b border-gray-500">
+          <TableHead>
+            <TableRow>
+              <TableCell
+                align="center"
+                className="w-1 border-[1px] border-t-0 border-gray-500"
+                style={{
+                  backgroundColor: "#690B22",
+                  color: "white",
+                }}
+              ></TableCell>
+              {columns.map((column) => (
+                <TableCell
+                  className="border-[1px] border-t-0 border-gray-500"
+                  key={column.key}
+                  align={column.align || "center"}
+                  style={{
+                    backgroundColor: "#690B22",
+                    color: "white",
+                    font: "status-bar",
+                    fontSize: "15px",
+                  }}
+                >
+                  {column.label}
+                </TableCell>
+              ))}
+            </TableRow>
+          </TableHead>
+          <TableBody
+            sx={{
+              overflowY: "auto",
+              "&::-webkit-scrollbar": {
+                display: "none",
+              },
+            }}
+          >
+            {data.length === 0 ? (
+              <TableRow>
+                <TableCell colSpan={columns.length + 1} align="center">
+                  {productPageLocalization.noProduct}
+                </TableCell>
+              </TableRow>
+            ) : (
+              data
+                .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
+                .map((row, rowIndex) => {
+                  const rowBgColor =
+                    row.deliveryStatus === true || row.quantity === 0
+                      ? "#fee2e2"
+                      : row.deliveryStatus === false
+                      ? "#dcfce7"
+                      : "inherit";
+
+                  return (
+                    <TableRow
+                      hover
+                      key={row.id || rowIndex}
+                      sx={{ backgroundColor: rowBgColor }}
+                    >
+                      <TableCell
+                        align="center"
+                        className="border-[1px] border-gray-500"
+                        sx={{
+                          padding: 1,
+                        }}
+                      >
+                        {page * rowsPerPage + rowIndex + 1}
+                      </TableCell>
+                      {columns.map((column) => (
+                        <TableCell
+                          className="border-[1px] border-gray-500"
+                          key={column.key}
+                          align={column.align || "center"}
+                          sx={{
+                            padding: 1,
+                            font: "status-bar",
+                            fontSize: "15px",
+                          }}
+                        >
+                          {formatCell(row, column.key, onDelete, onEdit)}
+                        </TableCell>
+                      ))}
+                    </TableRow>
+                  );
+                })
+            )}
+          </TableBody>
+        </Table>
+      </TableContainer>
+      <TablePagination
+        dir="ltr"
+        rowsPerPageOptions={[10, 25, 100]}
+        component="div"
+        count={data.length}
+        rowsPerPage={rowsPerPage}
+        page={page}
+        onPageChange={handleChangePage}
+        onRowsPerPageChange={handleChangeRowsPerPage}
+        labelRowsPerPage={tableLocalization.rowsPerPage}
+        labelDisplayedRows={({ from, to, count }) =>
+          `${from}–${to} ${tableLocalization.of} ${
+            count !== -1 ? count : `${tableLocalization.moreOf} ${to}`
+          }`
+        }
+        sx={{
+          "& .MuiTablePagination-displayedRows": {
+            direction: "rtl",
+          },
+        }}
+        classes={{
+          root: "flex justify-center",
+          toolbar: "flex justify-between",
+          displayedRows: "",
+          select: "border border-gray-300 rounded-md",
+        }}
+      />
+    </Paper>
+  );
+}
