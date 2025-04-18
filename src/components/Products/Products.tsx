@@ -41,6 +41,7 @@ export default function Products() {
     const fetchGetProducts = async () => {
       try {
         const products = await GetProducts();
+        console.log(products)
         setAllProducts(products);
         setTableData((prev) => ({
           ...prev,
@@ -132,7 +133,7 @@ export default function Products() {
             />
             <select
               onChange={(e) => handleFilterChange(e.target.value)}
-              className="appearance-none bg-white border border-gray-400 text-black rounded-md px-3 py-2 outline-none focus:ring-4 focus:ring-primary"
+              className="appearance-non bg-white border border-gray-400 text-black rounded-md px-3 py-2 outline-none focus:ring-4 focus:ring-primary"
             >
               <option value="all">{productPageLocalization.all}</option>
               <option value="available">

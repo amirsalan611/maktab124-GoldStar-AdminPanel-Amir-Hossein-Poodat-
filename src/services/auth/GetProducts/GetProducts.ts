@@ -4,7 +4,7 @@ import { BASE_URL } from "../../API/API";
 export const GetProducts = async () => {
   try {
     const response = await axios.get(
-      `${BASE_URL}/api/products`
+      `${BASE_URL}/api/products?limit=all`
     );
     return response.data.data.products;
   } catch (error) {

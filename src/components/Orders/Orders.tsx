@@ -12,6 +12,35 @@ interface table {
   columns: Column[];
 }
 
+export interface datatype {
+  _id: string;
+  user: User;
+  products?: ProductsEntity[] | null;
+  totalPrice: number;
+  deliveryDate: string;
+  deliveryStatus: boolean;
+  createdAt: string;
+  updatedAt: string;
+}
+export interface User {
+  _id: string;
+  firstname: string;
+  lastname: string;
+  username: string;
+  phoneNumber: string;
+  address: string;
+  role: string;
+  createdAt: string;
+  updatedAt: string;
+  __v: number;
+}
+export interface ProductsEntity {
+  product?: null;
+  count: number;
+  _id: string;
+}
+
+
 export default function Orders() {
   const [tableData, setTableData] = useState<table>({
     orders: [],
@@ -24,7 +53,7 @@ export default function Orders() {
     ],
   });
 
-  const [allOrders, setAllOrders] = useState<any[]>([]);
+  const [allOrders, setAllOrders] = useState<ProductsEntity[]>([]);
   const [searchValue, setSearchValue] = useState("");
 
   const [handlePage, setHandelPage] = useState({
