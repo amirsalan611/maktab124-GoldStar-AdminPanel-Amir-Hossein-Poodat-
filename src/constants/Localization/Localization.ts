@@ -8,7 +8,8 @@ inventory:"موجودی"
 
 export const headerLocalization = {
     admin:"مدیر",
-    warning:"خطا در دریافت اطلاعات"
+    warning:"خطا در دریافت اطلاعات",
+    search:"جستجو"
 }
 
 export const logInLocalization = {
@@ -26,18 +27,24 @@ export const inputLocalization = {
 }
 
 export const productPageLocalization = {
-    prodctList:"لیست محصولات",
-    noProduct:"محصولی یافت نشد",
-    image:"تصویر",
-    name:"نام",
-    status:"وضعیت محصول",
-    count:"تعداد موجود",
-    price:"قیمت",
-    action:"اقدامات",
-    toman:"تومان",
-    is:"موجود",
-    not:"ناموجود"
-}
+  productList: "لیست محصولات",
+  noProduct: "محصولی یافت نشد",
+  image: "تصویر",
+  name: "نام",
+  status: "وضعیت محصول",
+  count: "تعداد موجود",
+  price: "قیمت",
+  action: "اقدامات",
+  toman: "تومان",
+  is: "موجود",
+  not: "ناموجود",
+  addProduct: "افزودت محصول جدید",
+  all: "همه محصولات",
+  available: "موجودی ها",
+  unavailable: "ناموجود ها",
+  most: "بیشترین به کم ترین",
+  least:"کمترین به بیشترین",
+};
 
 export const inventoryLocalization ={
     inventory:"لیست موجودی"
@@ -66,4 +73,11 @@ export const usersLocalization = {
   action: "اقدامات",
   user:"کاربر",
   admin:"مدیر"
+};
+
+export const tableLocalization = {
+  rowsPerPage: "ردیف ها در صفحه",
+  page:"صفحه",
+  of:"از",
+  moreOf:"بیشتر از"
 };
