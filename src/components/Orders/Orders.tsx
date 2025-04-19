@@ -11,7 +11,6 @@ interface table {
   orders: any[];
   columns: Column[];
 }
-
 export interface datatype {
   _id: string;
   user: User;
@@ -40,7 +39,6 @@ export interface ProductsEntity {
   _id: string;
 }
 
-
 export default function Orders() {
   const [tableData, setTableData] = useState<table>({
     orders: [],
@@ -53,8 +51,11 @@ export default function Orders() {
     ],
   });
 
-  const [allOrders, setAllOrders] = useState<ProductsEntity[]>([]);
+  const [allOrders, setAllOrders] = useState<datatype[]>([]);
   const [searchValue, setSearchValue] = useState("");
+  const [deliveryFilter, setDeliveryFilter] = useState<
+    "ALL" | "DELIVERED" | "NOT_DELIVERED"
+  >("ALL");
 
   const [handlePage, setHandelPage] = useState({
     loading: true,
@@ -65,12 +66,9 @@ export default function Orders() {
     const fetchGetOrders = async () => {
       try {
         const orders = await GetOrders();
-        console.log(orders)
+        console.log(orders);
         setAllOrders(orders);
-        setTableData((prev) => ({
-          ...prev,
-          orders: orders,
-        }));
+        setTableData((prev) => ({ ...prev, orders: orders }));
         setHandelPage({ ...handlePage, loading: false });
       } catch (error) {
         console.log(error);
@@ -80,17 +78,32 @@ export default function Orders() {
     fetchGetOrders();
   }, []);
 
-  const handleSearch = (value: string) => {
-    setSearchValue(value);
-
-    const filteredOrders = allOrders.filter((order: any) =>
-      order.user?.username?.toLowerCase().includes(value.toLowerCase())
-    );
-
+  const filterOrders = (search: string, filter: typeof deliveryFilter) => {
+    let filtered = allOrders;
+    if (search) {
+      filtered = filtered.filter((order) =>
+        order.user.username.toLowerCase().includes(search.toLowerCase())
+      );
+    }
+    if (filter === "DELIVERED") {
+      filtered = filtered.filter((order) => order.deliveryStatus === true);
+    } else if (filter === "NOT_DELIVERED") {
+      filtered = filtered.filter((order) => order.deliveryStatus === false);
+    }
     setTableData((prev) => ({
       ...prev,
-      orders: filteredOrders,
+      orders: filtered,
     }));
+  };
+
+  const handleSearch = (value: string) => {
+    setSearchValue(value);
+    filterOrders(value, deliveryFilter);
+  };
+
+  const handleFilterChange = (filterValue: typeof deliveryFilter) => {
+    setDeliveryFilter(filterValue);
+    filterOrders(searchValue, filterValue);
   };
 
   const handleDelete = () => {};
@@ -106,8 +119,53 @@ export default function Orders() {
             value={searchValue}
             onChange={(e) => handleSearch(e.target.value)}
             className="border w-[350px] border-gray-400 outline-none rounded-md my-5 py-2 px-5"
-            placeholder="search by user name"
+            placeholder={ordersLocalization.search}
           />
+          <div className="flex gap-4 items-center m-auto">
+            <div className="flex gap-1">
+              <input
+                id="all"
+                className="accent-red-500"
+                type="radio"
+                name="filter"
+                value="ALL"
+                checked={deliveryFilter === "ALL"}
+                onChange={() => handleFilterChange("ALL")}
+              />
+              <label className="flex items-center gap-1" htmlFor="all">
+                {ordersLocalization.all}
+              </label>
+            </div>
+            <div className="flex gap-1">
+              <input
+                id="DELIVERED"
+                type="radio"
+                name="filter"
+                value="DELIVERED"
+                checked={deliveryFilter === "DELIVERED"}
+                onChange={() => handleFilterChange("DELIVERED")}
+              />
+              <label className="flex items-center gap-1" htmlFor="DELIVERED">
+                {ordersLocalization.DELIVERED}
+              </label>
+            </div>
+            <div className="flex gap-1">
+              <input
+                id="NOT_DELIVERED"
+                type="radio"
+                name="filter"
+                value="NOT_DELIVERED"
+                checked={deliveryFilter === "NOT_DELIVERED"}
+                onChange={() => handleFilterChange("NOT_DELIVERED")}
+              />
+              <label
+                className="flex items-center gap-1"
+                htmlFor="NOT_DELIVERED"
+              >
+                {ordersLocalization.NOT_DELIVERED}
+              </label>
+            </div>
+          </div>
         </div>
         <MuiTable
           data={tableData.orders}

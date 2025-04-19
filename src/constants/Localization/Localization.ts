@@ -1,16 +1,16 @@
-export const asidebarlocalization={
-products:"محصولات",
-orders:"سفارشات",
-users:"کاربران",
-logOut:"خروج از حساب کاربری",
-inventory:"موجودی"
-}
+export const asidebarlocalization = {
+  products: "محصولات",
+  orders: "سفارشات",
+  users: "کاربران",
+  logOut: "خروج از حساب کاربری",
+  inventory: "موجودی",
+};
 
 export const headerLocalization = {
-    admin:"مدیر",
-    warning:"خطا در دریافت اطلاعات",
-    search:"جستجو"
-}
+  admin: "مدیر",
+  warning: "خطا در دریافت اطلاعات",
+  search: "جستجو",
+};
 
 export const logInLocalization = {
   email: "ایمیل",
@@ -20,11 +20,12 @@ export const logInLocalization = {
   incorrect: "ایمیل یا رمز شما نا معتبر است",
   error: "خطا در ورود، لطفاً دوباره تلاش کنید",
   login: "ورود به حساب کاربری",
+  notAdmin: "شما دسترسی لازم برای ورود به این پنل را ندارید.",
 };
 
 export const inputLocalization = {
-    text : "لطفا این قسمت را پر نمایید !"
-}
+  text: "لطفا این قسمت را پر نمایید !",
+};
 
 export const productPageLocalization = {
   productList: "لیست محصولات",
@@ -43,12 +44,12 @@ export const productPageLocalization = {
   available: "موجودی ها",
   unavailable: "ناموجود ها",
   most: "بیشترین به کم ترین",
-  least:"کمترین به بیشترین",
+  least: "کمترین به بیشترین",
 };
 
-export const inventoryLocalization ={
-    inventory:"لیست موجودی"
-}
+export const inventoryLocalization = {
+  inventory: "لیست موجودی",
+};
 
 export const ordersLocalization = {
   user: "نام کاربر",
@@ -57,9 +58,13 @@ export const ordersLocalization = {
   deliveryStatus: "وضعیت ارسال",
   action: "اقدامات",
   noOrder: "سفارشی یافت نشد",
-  orders:"لیست سفارشات",
-  sending:"درحال ارسال",
-  sended:"ارسال شده"
+  orders: "لیست سفارشات",
+  sending: "درحال ارسال",
+  sended: "ارسال شده",
+  all: "همه سفارش‌ها",
+  DELIVERED: "ارسال داده شده‌ها",
+  NOT_DELIVERED: "ارسال نشده‌ها",
+  search:"جستجو بر اساس نام کاربری"
 };
 
 export const usersLocalization = {
@@ -71,13 +76,14 @@ export const usersLocalization = {
   role: "سمت",
   noUser: "کاربری یافت نشد",
   action: "اقدامات",
-  user:"کاربر",
-  admin:"مدیر"
+  user: "کاربر",
+  admin: "مدیر",
 };
 
 export const tableLocalization = {
   rowsPerPage: "ردیف ها در صفحه",
-  page:"صفحه",
-  of:"از",
-  moreOf:"بیشتر از"
+  page: "صفحه",
+  of: "از",
+  moreOf: "بیشتر از",
+  to:"تا"
 };
