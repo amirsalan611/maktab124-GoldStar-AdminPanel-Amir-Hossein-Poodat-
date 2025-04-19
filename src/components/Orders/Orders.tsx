@@ -1,7 +1,8 @@
 import { useEffect, useState } from "react";
 import { ordersLocalization } from "../../constants/Localization/Localization";
 import { GetOrders } from "../../services/auth/GetOrders/GetOrders";
-import MuiTable from "../shared/Table/Table";
+import RadioFiltering from "./RadioFiltering/RadioFiltering";
+import MainTable from "../shared/Table/MainTable";
 
 interface Column {
   key: string;
@@ -121,53 +122,12 @@ export default function Orders() {
             className="border w-[350px] border-gray-400 outline-none rounded-md my-5 py-2 px-5"
             placeholder={ordersLocalization.search}
           />
-          <div className="flex gap-4 items-center m-auto">
-            <div className="flex gap-1">
-              <input
-                id="all"
-                className="accent-red-500"
-                type="radio"
-                name="filter"
-                value="ALL"
-                checked={deliveryFilter === "ALL"}
-                onChange={() => handleFilterChange("ALL")}
-              />
-              <label className="flex items-center gap-1" htmlFor="all">
-                {ordersLocalization.all}
-              </label>
-            </div>
-            <div className="flex gap-1">
-              <input
-                id="DELIVERED"
-                type="radio"
-                name="filter"
-                value="DELIVERED"
-                checked={deliveryFilter === "DELIVERED"}
-                onChange={() => handleFilterChange("DELIVERED")}
-              />
-              <label className="flex items-center gap-1" htmlFor="DELIVERED">
-                {ordersLocalization.DELIVERED}
-              </label>
-            </div>
-            <div className="flex gap-1">
-              <input
-                id="NOT_DELIVERED"
-                type="radio"
-                name="filter"
-                value="NOT_DELIVERED"
-                checked={deliveryFilter === "NOT_DELIVERED"}
-                onChange={() => handleFilterChange("NOT_DELIVERED")}
-              />
-              <label
-                className="flex items-center gap-1"
-                htmlFor="NOT_DELIVERED"
-              >
-                {ordersLocalization.NOT_DELIVERED}
-              </label>
-            </div>
-          </div>
+          <RadioFiltering
+            checked={deliveryFilter}
+            onChange={handleFilterChange}
+          />
         </div>
-        <MuiTable
+        <MainTable
           data={tableData.orders}
           columns={tableData.columns}
           onDelete={handleDelete}

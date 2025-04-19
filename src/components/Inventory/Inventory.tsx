@@ -5,7 +5,7 @@ import {
   inventoryLocalization,
   productPageLocalization,
 } from "../../constants/Localization/Localization";
-import MuiTable from "../shared/Table/Table";
+import MainTable from "../shared/Table/MainTable";
 
 interface Column {
   key: string;
@@ -101,7 +101,7 @@ export default function Inventory() {
             placeholder="search by product name"
           />
         </div>
-        <MuiTable
+        <MainTable
           data={tableData.products}
           columns={tableData.columns}
           onDelete={handleDelete}

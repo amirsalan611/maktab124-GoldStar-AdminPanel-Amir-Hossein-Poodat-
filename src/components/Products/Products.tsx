@@ -5,8 +5,8 @@ import {
   headerLocalization,
   productPageLocalization,
 } from "../../constants/Localization/Localization";
-import MuiTable from "../shared/Table/Table";
 import Button from "../shared/Button/Button";
+import MainTable from "../shared/Table/MainTable";
 
 interface Column {
   key: string;
@@ -152,7 +152,7 @@ export default function Products() {
             buttonClassName="border border-primary w-full p-2 text-primary hover:border-none hover:bg-primary font-sans "
           />
         </div>
-        <MuiTable
+        <MainTable
           data={tableData.products}
           columns={tableData.columns}
           onDelete={handleDelete}

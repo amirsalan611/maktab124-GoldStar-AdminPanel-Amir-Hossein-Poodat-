@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import { GetUsers } from "../../services/auth/GetUsers/GerUsers";
 import { usersLocalization } from "../../constants/Localization/Localization";
-import MuiTable from "../shared/Table/Table";
+import MainTable from "../shared/Table/MainTable";
 
 interface Column {
   key: string;
@@ -80,7 +80,7 @@ export default function Users() {
             placeholder="search by username"
           />
         </div>
-        <MuiTable
+        <MainTable
           data={tableData.users}
           columns={tableData.columns}
           onDelete={handleDelete}

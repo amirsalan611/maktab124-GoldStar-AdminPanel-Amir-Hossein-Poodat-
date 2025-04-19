@@ -74,7 +74,7 @@ const formatCell = (
     case "user":
       return row.user?.username || "-";
     case "role":
-      return row.role === "user"
+      return row.role.toLowerCase() === "user"
         ? usersLocalization.user
         : usersLocalization.admin;
     case "deliveryStatus":
@@ -85,6 +85,12 @@ const formatCell = (
       return row.deliveryDate
         ? moment(row.deliveryDate).locale("fa").format("jYYYY/jMM/jDD")
         : "-";
+    // case "quantity":
+    //   return (
+    //     <span onDoubleClick={() => {}}>
+    //       {!isedit ? <p>{row.quantity}</p> : <input value={row.quantity} />}
+    //     </span>
+    //   );
     default:
       return row[key];
   }
@@ -220,7 +226,7 @@ export default function MuiTable({
         onRowsPerPageChange={handleChangeRowsPerPage}
         labelRowsPerPage={tableLocalization.rowsPerPage}
         labelDisplayedRows={({ from, to, count }) =>
-          `${from}–${to} ${tableLocalization.of} ${
+          `${from}${tableLocalization.to}${to} ${tableLocalization.of} ${
             count !== -1 ? count : `${tableLocalization.moreOf} ${to}`
           }`
         }

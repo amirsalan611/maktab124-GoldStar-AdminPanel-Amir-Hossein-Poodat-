@@ -43,14 +43,16 @@ export default function Login() {
       const result = await LoginAdmin(formData.email, formData.password);
       console.log(result.data);
       if (result.status === 200) {
-        localStorage.setItem("token", result.data.token.accessToken);
-        localStorage.setItem(
-          "adminData",
-          JSON.stringify(result.data.data.user)
-        );
-        toast.success(logInLocalization.success);
-        setErrors({ ...errors, incorrect: false });
-        navigate("/panel");
+        const user = result.data.data.user;
+
+        if (user.role === "ADMIN") {
+          localStorage.setItem("token", result.data.token.accessToken);
+          localStorage.setItem("adminData", JSON.stringify(user));
+          toast.success(logInLocalization.success);
+          navigate("/panel");
+        } else {
+          toast.error(logInLocalization.notAdmin);
+        }
       }
     } catch (error: any) {
       if (error?.status === 401) {

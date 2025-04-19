@@ -29,7 +29,7 @@ export const inputLocalization = {
 
 export const productPageLocalization = {
   productList: "لیست محصولات",
-  noProduct: "محصولی یافت نشد",
+  noProduct: "اطلاعاتی یافت نشد",
   image: "تصویر",
   name: "نام",
   status: "وضعیت محصول",
