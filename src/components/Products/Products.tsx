@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react";
 import { GetProducts } from "../../services/auth/GetProducts/GetProducts";
+import { DeleteProduct } from "../../services/auth/DeleteProduct/DeleteProduct";
 import Loader2 from "../Loading/Loading2";
 import {
   headerLocalization,
@@ -7,10 +8,8 @@ import {
 } from "../../constants/Localization/Localization";
 import Button from "../shared/Button/Button";
 import MainTable from "../shared/Table/MainTable";
-import {
-  TableContextProvider,
-  useTableContext,
-} from "../shared/Table/tableContext/tableContext";
+import { useTableContext } from "../shared/Table/tableContext/tableContext";
+import Swal, { SweetAlertIcon } from "sweetalert2";
 
 interface Column {
   key: string;
@@ -33,7 +32,7 @@ export default function Products() {
     ],
   });
 
-  const { shouldRefetch } = useTableContext();
+  const { shouldRefetch, setShouldRefetch } = useTableContext();
 
   const [allProducts, setAllProducts] = useState<any[]>([]);
   const [searchText, setSearchText] = useState("");
@@ -112,7 +111,68 @@ export default function Products() {
     }));
   };
 
-  const handleDelete = () => {};
+  const handleDelete = async (productId: string) => {
+    console.log(productId);
+    Swal.fire({
+      title: productPageLocalization.confirmDelete,
+      text: productPageLocalization.confirmDeleteAlert,
+      icon: "warning",
+      showCancelButton: true,
+      confirmButtonColor: "#3085d6",
+      cancelButtonColor: "#d33",
+      confirmButtonText: productPageLocalization.delete,
+      cancelButtonText: productPageLocalization.cancel,
+      customClass: {
+        confirmButton: "bg-blue-400 text-white shadow-2xl rounded-2xl",
+        cancelButton: "bg-red-400 text-white shadow-2xl rounded-2xl",
+        popup: "bg-white rounded-lg shadow-2xl rounded-2xl",
+      },
+      backdrop: `
+    rgba(0, 0, 0, 0.2)
+    left top
+    no-repeat
+    fixed
+  `,
+      didOpen: () => {
+        const swalBackdrop = document.querySelector(
+          ".swal2-container"
+        ) as HTMLElement;
+        if (swalBackdrop) {
+          swalBackdrop.style.backdropFilter = "blur(1px)";
+        }
+      },
+    }).then(async (result) => {
+      if (result.isConfirmed) {
+        const result = await DeleteProduct(productId);
+        console.log(result);
+        setShouldRefetch(!shouldRefetch);
+        Swal.fire({
+          title: productPageLocalization.deleteSuccess,
+          icon: "success",
+          confirmButtonText: productPageLocalization.ok,
+          customClass: {
+            confirmButton: "bg-blue-400 text-white shadow-2xl rounded-2xl",
+            popup: "bg-white rounded-lg shadow-2xl rounded-2xl",
+          },
+          backdrop: `
+    rgba(0, 0, 0, 0.2)
+    left top
+    no-repeat
+    fixed
+  `,
+          didOpen: () => {
+            const swalBackdrop = document.querySelector(
+              ".swal2-container"
+            ) as HTMLElement;
+            if (swalBackdrop) {
+              swalBackdrop.style.backdropFilter = "blur(1px)";
+            }
+          },
+        });
+      }
+    });
+  };
+
   const handleEdit = () => {};
 
   if (handlePage.loading) {
