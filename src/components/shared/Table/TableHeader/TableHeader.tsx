@@ -11,7 +11,7 @@ interface TableHeaderProps {
 
 const TableHeader: React.FC<TableHeaderProps> = ({ columns }) => {
   return (
-    <TableRow>
+    <TableRow >
       <TableCell
         align="center"
         className="w-1 border-[1px] border-t-0 border-gray-500"

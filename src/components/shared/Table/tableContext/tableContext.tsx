@@ -4,15 +4,6 @@ interface edited {
   quantityValue?: string;
   priceValue?: string;
 }
-interface ProductQuantityEdit {
-  id: string;
-  quantityValue: string;
-}
-
-interface ProductPriceEdit {
-  id: string;
-  priceValue: string;
-}
 
 interface RowId {
   id: string;

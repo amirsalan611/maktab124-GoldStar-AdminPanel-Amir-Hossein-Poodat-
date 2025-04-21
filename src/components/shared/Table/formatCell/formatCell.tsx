@@ -40,10 +40,10 @@ const formatCell = ({ row, keyName, onDelete, onEdit }: FormatCellProps) => {
     case "action":
       return (
         <div style={{ display: "flex", gap: 8, justifyContent: "center" }}>
-          <IconButton onClick={() => onDelete(row.id)}>
+          <IconButton onClick={() => onDelete(row._id)}>
             <MdDeleteForever color="red" />
           </IconButton>
-          <IconButton onClick={() => onEdit(row.id)}>
+          <IconButton onClick={() => onEdit(row._id)}>
             <MdEditSquare color="blue" />
           </IconButton>
         </div>
@@ -68,7 +68,6 @@ const formatCell = ({ row, keyName, onDelete, onEdit }: FormatCellProps) => {
         >
           {productInEditPrice ? (
             <>
-              {" "}
               <input
                 type="text"
                 value={String(productInEditPrice.priceValue ?? row.price)}
@@ -80,7 +79,7 @@ const formatCell = ({ row, keyName, onDelete, onEdit }: FormatCellProps) => {
                     );
                   });
                 }}
-                className="border bg-red-300 px-3 text-center py-1 rounded w-20"
+                className="border bg-red-300 px-3 text-center py-1 rounded w-32"
               />
               {productPageLocalization.toman}
             </>
@@ -117,7 +116,7 @@ const formatCell = ({ row, keyName, onDelete, onEdit }: FormatCellProps) => {
         : "-";
 
     case "quantity":
-      const id = row._id || row.id;
+      const id = row._id || row._id;
       const productInEdit = productsOnEdit.find(
         (p) => p.id === id
       );

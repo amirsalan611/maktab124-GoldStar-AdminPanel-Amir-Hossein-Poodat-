@@ -94,10 +94,11 @@ const handleSaveChanges = async () => {
         borderRadius: "20px",
         border: "1px solid #ccc",
         position: "relative",
+        maxHeight: "690px",
       }}
     >
-      <TableContainer sx={{ maxHeight: 640 }}>
-        <Table stickyHeader className="border-b border-gray-500">
+      <TableContainer sx={{ maxHeight: 640, scrollbarWidth: "none" }}>
+        <Table stickyHeader className="border-b border-gray-500 relative">
           <TableHeader columns={columns} />
           {data.length === 0 ? (
             <TableEmptyRow />
