@@ -6,7 +6,8 @@ import MainTable from "../shared/Table/MainTable";
 import {
   useTableContext,
 } from "../shared/Table/tableContext/tableContext";
-
+import Swal from "sweetalert2";
+import { DeleteOrder } from "../../services/auth/DeleteOrder/DeleteOrder";
 interface Column {
   key: string;
   label: string;
@@ -55,7 +56,7 @@ export default function Orders() {
     ],
   });
 
-  const { shouldRefetch } = useTableContext();
+  const { shouldRefetch, setShouldRefetch } = useTableContext();
 
   const [allOrders, setAllOrders] = useState<datatype[]>([]);
   const [searchValue, setSearchValue] = useState("");
@@ -112,7 +113,67 @@ export default function Orders() {
     filterOrders(searchValue, filterValue);
   };
 
-  const handleDelete = () => {};
+  const handleDelete = async (productId: string) => {
+    console.log(productId);
+    Swal.fire({
+      title: ordersLocalization.confirmDelete,
+      text: ordersLocalization.confirmDeleteAlert,
+      icon: "warning",
+      showCancelButton: true,
+      confirmButtonColor: "#3085d6",
+      cancelButtonColor: "#d33",
+      confirmButtonText: ordersLocalization.delete,
+      cancelButtonText: ordersLocalization.cancel,
+      customClass: {
+        confirmButton: "bg-blue-400 text-white shadow-2xl rounded-2xl",
+        cancelButton: "bg-red-400 text-white shadow-2xl rounded-2xl",
+        popup: "bg-white rounded-lg shadow-2xl rounded-2xl",
+      },
+      backdrop: `
+    rgba(0, 0, 0, 0.2)
+    left top
+    no-repeat
+    fixed
+  `,
+      didOpen: () => {
+        const swalBackdrop = document.querySelector(
+          ".swal2-container"
+        ) as HTMLElement;
+        if (swalBackdrop) {
+          swalBackdrop.style.backdropFilter = "blur(1px)";
+        }
+      },
+    }).then(async (result) => {
+      if (result.isConfirmed) {
+        const result = await DeleteOrder(productId);
+        console.log(result);
+        setShouldRefetch(!shouldRefetch);
+        Swal.fire({
+          title: ordersLocalization.deleteSuccess,
+          icon: "success",
+          confirmButtonText: ordersLocalization.ok,
+          customClass: {
+            confirmButton: "bg-blue-400 text-white shadow-2xl rounded-2xl",
+            popup: "bg-white rounded-lg shadow-2xl rounded-2xl",
+          },
+          backdrop: `
+    rgba(0, 0, 0, 0.2)
+    left top
+    no-repeat
+    fixed
+  `,
+          didOpen: () => {
+            const swalBackdrop = document.querySelector(
+              ".swal2-container"
+            ) as HTMLElement;
+            if (swalBackdrop) {
+              swalBackdrop.style.backdropFilter = "blur(1px)";
+            }
+          },
+        });
+      }
+    });
+  };
   const handleedit = () => {};
 
   return (
