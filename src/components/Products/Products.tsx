@@ -7,6 +7,10 @@ import {
 } from "../../constants/Localization/Localization";
 import Button from "../shared/Button/Button";
 import MainTable from "../shared/Table/MainTable";
+import {
+  TableContextProvider,
+  useTableContext,
+} from "../shared/Table/tableContext/tableContext";
 
 interface Column {
   key: string;
@@ -29,6 +33,8 @@ export default function Products() {
     ],
   });
 
+  const { shouldRefetch } = useTableContext();
+
   const [allProducts, setAllProducts] = useState<any[]>([]);
   const [searchText, setSearchText] = useState("");
 
@@ -41,7 +47,7 @@ export default function Products() {
     const fetchGetProducts = async () => {
       try {
         const products = await GetProducts();
-        console.log(products)
+        console.log(products);
         setAllProducts(products);
         setTableData((prev) => ({
           ...prev,
@@ -54,7 +60,7 @@ export default function Products() {
       }
     };
     fetchGetProducts();
-  }, []);
+  }, [shouldRefetch]);
 
   const handleFilterChange = (value: string) => {
     let filteredProducts = [...allProducts];
@@ -96,7 +102,7 @@ export default function Products() {
   const handleSearchChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const value = e.target.value;
     setSearchText(value);
-    
+
     const filtered = allProducts.filter((p: any) =>
       p.name.toLowerCase().includes(value.toLowerCase())
     );

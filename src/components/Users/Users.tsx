@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 import { GetUsers } from "../../services/auth/GetUsers/GerUsers";
 import { usersLocalization } from "../../constants/Localization/Localization";
 import MainTable from "../shared/Table/MainTable";
+import { TableContextProvider } from "../shared/Table/tableContext/tableContext";
 
 interface Column {
   key: string;
@@ -80,12 +81,12 @@ export default function Users() {
             placeholder="search by username"
           />
         </div>
-        <MainTable
-          data={tableData.users}
-          columns={tableData.columns}
-          onDelete={handleDelete}
-          onEdit={handleedit}
-        />
+          <MainTable
+            data={tableData.users}
+            columns={tableData.columns}
+            onDelete={handleDelete}
+            onEdit={handleedit}
+          />
       </div>
     </div>
   );

@@ -6,6 +6,10 @@ import {
   productPageLocalization,
 } from "../../constants/Localization/Localization";
 import MainTable from "../shared/Table/MainTable";
+import {
+  TableContextProvider,
+  useTableContext,
+} from "../shared/Table/tableContext/tableContext";
 
 interface Column {
   key: string;
@@ -28,6 +32,8 @@ export default function Inventory() {
     ],
   });
 
+  const { shouldRefetch } = useTableContext();
+
   const [allProducts, setAllProducts] = useState<any[]>([]);
   const [searchValue, setSearchValue] = useState("");
 
@@ -40,7 +46,7 @@ export default function Inventory() {
     const fetchGetProducts = async () => {
       try {
         const products = await GetProducts();
-        console.log(products)
+        console.log(products);
         const filteredProducts = products.filter(
           (product: any) => product.quantity >= 1
         );
@@ -56,7 +62,7 @@ export default function Inventory() {
       }
     };
     fetchGetProducts();
-  }, []);
+  }, [shouldRefetch]);
 
   const handleSearch = (value: string) => {
     setSearchValue(value);

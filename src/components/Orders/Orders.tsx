@@ -3,6 +3,9 @@ import { ordersLocalization } from "../../constants/Localization/Localization";
 import { GetOrders } from "../../services/auth/GetOrders/GetOrders";
 import RadioFiltering from "./RadioFiltering/RadioFiltering";
 import MainTable from "../shared/Table/MainTable";
+import {
+  useTableContext,
+} from "../shared/Table/tableContext/tableContext";
 
 interface Column {
   key: string;
@@ -52,6 +55,8 @@ export default function Orders() {
     ],
   });
 
+  const { shouldRefetch } = useTableContext();
+
   const [allOrders, setAllOrders] = useState<datatype[]>([]);
   const [searchValue, setSearchValue] = useState("");
   const [deliveryFilter, setDeliveryFilter] = useState<
@@ -77,7 +82,7 @@ export default function Orders() {
       }
     };
     fetchGetOrders();
-  }, []);
+  }, [shouldRefetch]);
 
   const filterOrders = (search: string, filter: typeof deliveryFilter) => {
     let filtered = allOrders;

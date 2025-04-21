@@ -2,7 +2,6 @@ import React from "react";
 import { TableCell, TableRow } from "@mui/material";
 import formatCell from "../formatCell/formatCell";
 
-
 interface TableRowProps {
   row: any;
   columns: {
@@ -53,7 +52,12 @@ const TableRowC: React.FC<TableRowProps> = ({
             fontSize: "15px",
           }}
         >
-          {formatCell({ row, keyName: column.key, onDelete, onEdit })}
+          {formatCell({
+            row,
+            keyName: column.key,
+            onDelete,
+            onEdit,
+          })}
         </TableCell>
       ))}
     </TableRow>

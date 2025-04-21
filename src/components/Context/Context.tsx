@@ -12,6 +12,7 @@ interface AsideContextType {
 }
 
 const AsideContext = createContext<AsideContextType | null>(null);
+
 interface AsideProviderProps {
   children: ReactNode;
 }

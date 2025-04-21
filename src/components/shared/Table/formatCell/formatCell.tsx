@@ -6,22 +6,27 @@ import {
   productPageLocalization,
   usersLocalization,
 } from "../../../../constants/Localization/Localization";
+import { useTableContext } from "../tableContext/tableContext";
 
 interface FormatCellProps {
   row: any;
   keyName: string;
   onDelete: (id: string) => void;
   onEdit: (id: string) => void;
-  isedit?: boolean;
 }
 
-const formatCell = ({
-  row,
-  keyName,
-  onDelete,
-  onEdit,
-  isedit,
-}: FormatCellProps) => {
+const formatCell = ({ row, keyName, onDelete, onEdit }: FormatCellProps) => {
+  const {
+    productsOnEdit,
+    setProductsOnEdit,
+    setIsEditing,
+    rowInEditId,
+    setRowInEditId,
+    productsPriceOnEdit,
+    setProductsPriceOnEdit,
+    rowPriceInEditId,
+    setRowPriceInEditId,
+  } = useTableContext();
   switch (keyName) {
     case "images":
       return (
@@ -44,6 +49,48 @@ const formatCell = ({
         </div>
       );
     case "price":
+      const idPrice = row._id || row.id;
+      const productInEditPrice = productsPriceOnEdit.find(
+        (p) => p.id === idPrice
+      );
+      return (
+        <span
+          onDoubleClick={() => {
+            if (!rowPriceInEditId.some((r) => r.id === idPrice)) {
+              setRowPriceInEditId((prev) => [...prev, { id: idPrice }]);
+              setIsEditing(true);
+              setProductsPriceOnEdit((prev) => [
+                ...prev,
+                { id: idPrice, priceValue: String(row.price) },
+              ]);
+            }
+          }}
+        >
+          {productInEditPrice ? (
+            <>
+              {" "}
+              <input
+                type="text"
+                value={String(productInEditPrice.priceValue ?? row.price)}
+                onChange={(e) => {
+                  const updatedValue = e.target.value;
+                  setProductsPriceOnEdit((prev) => {
+                    return prev.map((p) =>
+                      p.id === idPrice ? { ...p, priceValue: updatedValue } : p
+                    );
+                  });
+                }}
+                className="border bg-red-300 px-3 text-center py-1 rounded w-20"
+              />
+              {productPageLocalization.toman}
+            </>
+          ) : (
+            <p>
+              {row[keyName].toLocaleString()} {productPageLocalization.toman}
+            </p>
+          )}
+        </span>
+      );
     case "totalPrice":
       return (
         <span>
@@ -68,12 +115,46 @@ const formatCell = ({
       return row.deliveryDate
         ? moment(row.deliveryDate).locale("fa").format("jYYYY/jMM/jDD")
         : "-";
+
     case "quantity":
+      const id = row._id || row.id;
+      const productInEdit = productsOnEdit.find(
+        (p) => p.id === id
+      );
+
       return (
-        <span onDoubleClick={() => {}}>
-          {!isedit ? <p>{row.quantity}</p> : <input value={row.quantity} />}
+        <span
+          onDoubleClick={() => {
+            if (!rowInEditId.some((r) => r.id === id)) {
+              setRowInEditId((prev) => [...prev, { id }]);
+              setIsEditing(true);
+              setProductsOnEdit((prev) => [
+                ...prev,
+                { id, quantityValue: String(row.quantity) },
+              ]);
+            }
+          }}
+        >
+          {productInEdit ? (
+            <input
+              type="text"
+              value={String(productInEdit.quantityValue ?? row.quantity)}
+              onChange={(e) => {
+                const updatedValue = e.target.value;
+                setProductsOnEdit((prev) => {
+                  return prev.map((p) =>
+                    p.id === id ? { ...p, quantityValue: updatedValue } : p
+                  );
+                });
+              }}
+              className="border bg-red-300 px-3 text-center py-1 rounded w-20"
+            />
+          ) : (
+            <p>{row.quantity}</p>
+          )}
         </span>
       );
+
     default:
       return row[keyName];
   }

@@ -85,5 +85,8 @@ export const tableLocalization = {
   page: "صفحه",
   of: "از",
   moreOf: "بیشتر از",
-  to:"تا"
+  to: "تا",
+  saveChanges: "ذخیره تغییرات",
+  saveError: "خطا در ذخیره تغییرات",
+  saveSucces: "تغییرات با موفقیت ذخیره شد",
 };
