@@ -2,7 +2,7 @@ import { useState } from "react";
 import Input from "../../components/shared/Input/Input";
 import { logInLocalization } from "../../constants/Localization/Localization";
 import Button from "../../components/shared/Button/Button";
-import { LoginAdmin } from "../../services/auth/handleLogin/handleLogin";
+import { LoginAdmin } from "../../services/auth/handelLogin/handelLogin";
 import { toast } from "react-toastify";
 import { useNavigate } from "react-router-dom";
 import logIn from "../../assets/images/login.svg";
