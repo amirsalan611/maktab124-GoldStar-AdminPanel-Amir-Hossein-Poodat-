@@ -1,8 +1,13 @@
 import { useEffect, useState } from "react";
 import { GetUsers } from "../../services/auth/GetUsers/GerUsers";
-import { usersLocalization } from "../../constants/Localization/Localization";
+import {
+  productPageLocalization,
+  usersLocalization,
+} from "../../constants/Localization/Localization";
 import MainTable from "../shared/Table/MainTable";
-import { TableContextProvider } from "../shared/Table/tableContext/tableContext";
+import Swal from "sweetalert2";
+import { DeleteUser } from "../../services/auth/DeleteUser/DeleteUser";
+import { useTableContext } from "../shared/Table/tableContext/tableContext";
 
 interface Column {
   key: string;
@@ -25,6 +30,8 @@ export default function Users() {
       { key: "action", label: usersLocalization.action },
     ],
   });
+
+  const { shouldRefetch, setShouldRefetch } = useTableContext();
 
   const [allUsers, setAllUsers] = useState<any[]>([]);
   const [searchValue, setSearchValue] = useState("");
@@ -50,7 +57,7 @@ export default function Users() {
       }
     };
     fetchGetProducts();
-  }, []);
+  }, [shouldRefetch]);
 
   const handleSearch = (value: string) => {
     setSearchValue(value);
@@ -65,7 +72,67 @@ export default function Users() {
     }));
   };
 
-  const handleDelete = () => {};
+  const handleDelete = async (productId: string) => {
+    console.log(productId);
+    Swal.fire({
+      title: usersLocalization.confirmDelete,
+      text: usersLocalization.confirmDeleteAlert,
+      icon: "warning",
+      showCancelButton: true,
+      confirmButtonColor: "#3085d6",
+      cancelButtonColor: "#d33",
+      confirmButtonText: usersLocalization.delete,
+      cancelButtonText: usersLocalization.cancel,
+      customClass: {
+        confirmButton: "bg-blue-400 text-white shadow-2xl rounded-2xl",
+        cancelButton: "bg-red-400 text-white shadow-2xl rounded-2xl",
+        popup: "bg-white rounded-lg shadow-2xl rounded-2xl",
+      },
+      backdrop: `
+    rgba(0, 0, 0, 0.2)
+    left top
+    no-repeat
+    fixed
+  `,
+      didOpen: () => {
+        const swalBackdrop = document.querySelector(
+          ".swal2-container"
+        ) as HTMLElement;
+        if (swalBackdrop) {
+          swalBackdrop.style.backdropFilter = "blur(1px)";
+        }
+      },
+    }).then(async (result) => {
+      if (result.isConfirmed) {
+        const result = await DeleteUser(productId);
+        console.log(result);
+        setShouldRefetch(!shouldRefetch);
+        Swal.fire({
+          title: usersLocalization.deleteSuccess,
+          icon: "success",
+          confirmButtonText: usersLocalization.ok,
+          customClass: {
+            confirmButton: "bg-blue-400 text-white shadow-2xl rounded-2xl",
+            popup: "bg-white rounded-lg shadow-2xl rounded-2xl",
+          },
+          backdrop: `
+    rgba(0, 0, 0, 0.2)
+    left top
+    no-repeat
+    fixed
+  `,
+          didOpen: () => {
+            const swalBackdrop = document.querySelector(
+              ".swal2-container"
+            ) as HTMLElement;
+            if (swalBackdrop) {
+              swalBackdrop.style.backdropFilter = "blur(1px)";
+            }
+          },
+        });
+      }
+    });
+  };
   const handleedit = () => {};
 
   return (
@@ -81,12 +148,12 @@ export default function Users() {
             placeholder="search by username"
           />
         </div>
-          <MainTable
-            data={tableData.users}
-            columns={tableData.columns}
-            onDelete={handleDelete}
-            onEdit={handleedit}
-          />
+        <MainTable
+          data={tableData.users}
+          columns={tableData.columns}
+          onDelete={handleDelete}
+          onEdit={handleedit}
+        />
       </div>
     </div>
   );

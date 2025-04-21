@@ -92,6 +92,13 @@ export const usersLocalization = {
   action: "اقدامات",
   user: "کاربر",
   admin: "مدیر",
+  confirmDelete: "آیا از حذف این کاربر اطمینان دارید؟",
+  confirmDeleteAlert: "با حذف این کاربر، همه اطلاعات مربوط به آن حذف خواهد شد",
+  deleteSuccess: "کاربر با موفقیت حذف شد",
+  deleteError: "خطا در حذف کاربر، لطفا دوباره تلاش کنید",
+  delete: "حذف",
+  cancel: "انصراف",
+  ok: "تایید",
 };
 
 export const tableLocalization = {
