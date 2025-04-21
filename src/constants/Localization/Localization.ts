@@ -45,6 +45,13 @@ export const productPageLocalization = {
   unavailable: "ناموجود ها",
   most: "بیشترین به کم ترین",
   least: "کمترین به بیشترین",
+  confirmDelete: "آیا از حذف این محصول اطمینان دارید؟",
+  confirmDeleteAlert: "با حذف این محصول، همه اطلاعات مربوط به آن حذف خواهد شد",
+  deleteSuccess: "محصول با موفقیت حذف شد",
+  deleteError: "خطا در حذف محصول، لطفا دوباره تلاش کنید",
+  delete: "حذف",
+  cancel: "انصراف",
+  ok: "تایید",
 };
 
 export const inventoryLocalization = {
@@ -64,7 +71,14 @@ export const ordersLocalization = {
   all: "همه سفارش‌ها",
   DELIVERED: "ارسال داده شده‌ها",
   NOT_DELIVERED: "ارسال نشده‌ها",
-  search:"جستجو بر اساس نام کاربری"
+  search: "جستجو بر اساس نام کاربری",
+  confirmDelete: "آیا از حذف این سفارش اطمینان دارید؟",
+  confirmDeleteAlert: "با حذف این سفارش، همه اطلاعات مربوط به آن حذف خواهد شد",
+  deleteSuccess: "سفارش با موفقیت حذف شد",
+  deleteError: "خطا در حذف سفارش، لطفا دوباره تلاش کنید",
+  delete: "حذف",
+  cancel: "انصراف",
+  ok: "تایید",
 };
 
 export const usersLocalization = {
