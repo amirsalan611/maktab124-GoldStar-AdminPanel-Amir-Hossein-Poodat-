@@ -1,7 +1,6 @@
 import { useEffect, useState } from "react";
 import { GetUsers } from "../../services/auth/GetUsers/GerUsers";
 import {
-  productPageLocalization,
   usersLocalization,
 } from "../../constants/Localization/Localization";
 import MainTable from "../shared/Table/MainTable";

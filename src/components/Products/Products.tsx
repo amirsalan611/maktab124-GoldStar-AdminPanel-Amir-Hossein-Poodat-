@@ -9,7 +9,8 @@ import {
 import Button from "../shared/Button/Button";
 import MainTable from "../shared/Table/MainTable";
 import { useTableContext } from "../shared/Table/tableContext/tableContext";
-import Swal, { SweetAlertIcon } from "sweetalert2";
+import Swal from "sweetalert2";
+import AddAndEditModal from "../ui/Add&EditModal/Add&EditModal";
 
 interface Column {
   key: string;
@@ -33,6 +34,7 @@ export default function Products() {
   });
 
   const { shouldRefetch, setShouldRefetch } = useTableContext();
+  const [isModalOpen, setIsModalOpen] = useState(false);
 
   const [allProducts, setAllProducts] = useState<any[]>([]);
   const [searchText, setSearchText] = useState("");
@@ -216,6 +218,7 @@ export default function Products() {
             buttonText={productPageLocalization.addProduct}
             type={"button"}
             buttonClassName="border border-primary w-full p-2 text-primary hover:border-none hover:bg-primary font-sans "
+            onClick={() => setIsModalOpen(true)}
           />
         </div>
         <MainTable
@@ -225,6 +228,10 @@ export default function Products() {
           onEdit={handleEdit}
         />
       </div>
+      <AddAndEditModal
+        isModalOpen={isModalOpen}
+        onClose={() => setIsModalOpen(false)}
+      />
     </div>
   );
 }

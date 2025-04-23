@@ -1,8 +1,9 @@
 import styled from "styled-components";
-import { inputLocalization } from "../../../constants/Localization/Localization";
+
 import { useState } from "react";
 import { FiEyeOff } from "react-icons/fi";
 import { IoEyeOutline } from "react-icons/io5";
+import { inputLocalization } from "../../../../constants/Localization/Localization";
 
 
 

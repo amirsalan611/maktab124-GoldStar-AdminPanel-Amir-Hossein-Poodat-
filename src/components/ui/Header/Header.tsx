@@ -1,5 +1,5 @@
 
-import goldstar from "../../assets/images/goldStar.jpg";
+import goldstar from "../../../assets/images/goldStar.jpg";
 
 
 export default function Header() {

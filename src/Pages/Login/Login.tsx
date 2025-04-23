@@ -1,5 +1,5 @@
 import { useState } from "react";
-import Input from "../../components/shared/Input/Input";
+
 import { logInLocalization } from "../../constants/Localization/Localization";
 import Button from "../../components/shared/Button/Button";
 import { LoginAdmin } from "../../services/auth/handelLogin/handelLogin";
@@ -7,6 +7,8 @@ import { toast } from "react-toastify";
 import { useNavigate } from "react-router-dom";
 import logIn from "../../assets/images/login.svg";
 import logIn2 from "../../assets/images/login2.svg";
+import Input from "../../components/shared/Input/Input/Input";
+
 
 export default function Login() {
   const navigate = useNavigate();

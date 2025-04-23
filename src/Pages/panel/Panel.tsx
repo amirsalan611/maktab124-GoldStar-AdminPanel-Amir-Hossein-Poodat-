@@ -1,11 +1,10 @@
 import { useContext } from "react";
 import Aside from "../../components/Aside/Aside";
-import Header from "../../components/Header/Header";
+import Header from "../../components/ui/Header/Header";
 import AsideContext from "../../components/Context/Context";
 import Orders from "../../components/Orders/Orders";
 import Products from "../../components/Products/Products";
 import Users from "../../components/Users/Users";
-import AddAndEdit from "../../components/Add&EditProduct/Add&EditProduct";
 import Inventory from "../../components/Inventory/Inventory";
 import { TableContextProvider } from "../../components/shared/Table/tableContext/tableContext";
 
@@ -22,8 +21,6 @@ export default function Panel() {
         return <Products />;
       case "users":
         return <Users />;
-      case "AddAndEdit":
-        return <AddAndEdit />;
       case "inventory":
         return <Inventory />;
     }
