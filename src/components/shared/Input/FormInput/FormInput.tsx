@@ -1,23 +1,37 @@
 import styled from "styled-components";
 import { ModalLocalization } from "../../../../constants/Localization/Localization";
-import { useForm } from "react-hook-form";
 
 interface InputProps {
   label: string;
   name: string;
   type: string;
   className?: string;
+  value?: string;
+  defaultValue?: string;
+  onChange?: (
+    e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
+  ) => void;
 }
-const InputForm = ({ label, name, type, className }: InputProps) => {
+const InputForm = ({
+  label,
+  name,
+  type,
+  className,
+  value,
+  defaultValue,
+  onChange,
+}: InputProps) => {
   return (
     <StyledWrapper className={`${className}`}>
       <div className="input-form">
         {type === "textarea" ? (
           <textarea
             key={name}
-            className="input w-full h-full min-h-[145px] resize-none"
-            required
+            className="input w-full h-full min-h-[145px] resize-none scrollbar-none"
             name={name}
+            value={value}
+            defaultValue={defaultValue}
+            onChange={onChange}
           />
         ) : (
           <input
@@ -26,9 +40,12 @@ const InputForm = ({ label, name, type, className }: InputProps) => {
             required
             name={name}
             type={type}
+            value={value}
+            defaultValue={defaultValue}
+            onChange={onChange}
           />
         )}
-        <label className="textUser">{label}</label>
+        <label className="textUser">{type === "textarea" ? "" : label}</label>
         {name === "price" && (
           <span className="text-gray-500 text-sm absolute left-20 top-1/2 -translate-y-1/2">
             {ModalLocalization.toman}

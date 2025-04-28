@@ -1,13 +1,14 @@
 "use client";
 import { useEffect, useState } from "react";
 import { ModalLocalization } from "../../../constants/Localization/Localization";
-import InputForm from "../../shared/Input/FormInput/FormInput";
-import ImageInput from "../../shared/Input/ImageInput/ImageInput";
 import { BASE_URL } from "../../../services/API/API";
 import axios from "axios";
-import ModalSelectOption from "../../shared/ModalSelectOption/ModalSelectOption";
 import { toast } from "react-toastify";
 import { useTableContext } from "../../shared/Table/tableContext/tableContext";
+import ProductFormFields from "./ProductFormFields";
+import ProductDetailsList from "./ProductDetailsList";
+import ProductColorsList from "./ProductColorsList";
+import ProductImagesUpload from "./ProductImagesUpload";
 
 interface Image {
   file: File;
@@ -15,6 +16,14 @@ interface Image {
 }
 
 interface FormData {
+  name: string;
+  brand: string;
+  quantity: string;
+  price: string;
+  discount: string;
+  description: string;
+  category: string;
+  subcategory: string;
   images: Image[];
   details: { id: number; content: string }[];
   colors: { id: number; content: string }[];
@@ -25,7 +34,20 @@ interface FormData {
 interface AddAndEditModalProps {
   isModalOpen: boolean;
   onClose: () => void;
-  data?: any;
+  data?: {
+    _id: string;
+    name: string;
+    brand: string;
+    quantity: number;
+    price: number;
+    discount?: number;
+    description: string;
+    category: { _id: string; name: string };
+    subcategory: { _id: string; name: string };
+    details: string[];
+    colors: string[];
+    images: string[];
+  };
 }
 
 export default function AddAndEditModal({
@@ -35,35 +57,87 @@ export default function AddAndEditModal({
 }: AddAndEditModalProps) {
   const { setShouldRefetch } = useTableContext();
   const [formData, setFormData] = useState<FormData>({
+    name: "",
+    brand: "",
+    quantity: "",
+    price: "",
+    discount: "",
+    description: "",
+    category: "",
+    subcategory: "",
     images: [],
     details: [
       {
-        id: 1,
+        id: Date.now(),
         content: "",
       },
     ],
     colors: [
       {
-        id: 1,
+        id: Date.now(),
         content: "",
       },
     ],
     categories: [],
     subCategories: [],
   });
-  console.log(formData);
 
   const [selectedCategory, setSelectedCategory] = useState<string | null>(null);
-
+  const [selectedSubCategory, setSelectedSubCategory] = useState<string | null>(
+    null
+  );
   const filteredSubCategories = formData.subCategories.filter(
     (sub: any) => sub.category === selectedCategory
   );
 
   useEffect(() => {
+    if (data) {
+      setFormData((prev) => ({
+        ...prev,
+        name: data.name || "",
+        brand: data.brand || "",
+        quantity: data.quantity?.toString() || "",
+        price: data.price?.toString() || "",
+        discount: data.discount?.toString() || "",
+        description: data.description || "",
+        category: data.category._id || "",
+        subcategory: data.subcategory._id || "",
+        details: data.details.map((content, index) => ({
+          id: Date.now() + index,
+          content,
+        })),
+        colors: data.colors.map((content, index) => ({
+          id: Date.now() + index,
+          content,
+        })),
+        images: data.images.map((url) => ({
+          file: new File([], url.split("/").pop() || ""),
+          preview: url,
+        })),
+      }));
+      setSelectedCategory(data.category._id);
+      setSelectedSubCategory(data.subcategory._id);
+    } else {
+      setFormData((prev) => ({
+        ...prev,
+        name: "",
+        brand: "",
+        quantity: "",
+        price: "",
+        discount: "",
+        description: "",
+        category: "",
+        subcategory: "",
+        details: [{ id: Date.now(), content: "" }],
+        colors: [{ id: Date.now(), content: "" }],
+        images: [],
+      }));
+      setSelectedCategory(null);
+      setSelectedSubCategory(null);
+    }
     const fetchCategories = async () => {
       try {
         const response = await axios.get(`${BASE_URL}/api/categories`);
-        console.log("Categories:", response.data.data.categories);
         setFormData((prev) => ({
           ...prev,
           categories: response.data.data.categories,
@@ -77,7 +151,6 @@ export default function AddAndEditModal({
         const response = await axios.get(
           `${BASE_URL}/api/subcategories?limit=all`
         );
-        console.log("SubCategories:", response.data.data.subcategories);
         setFormData((prev) => ({
           ...prev,
           subCategories: response.data.data.subcategories,
@@ -88,9 +161,9 @@ export default function AddAndEditModal({
     };
     fetchCategories();
     fetchSubCategories();
-  }, []);
+  }, [data]);
 
-  const handelSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
+  const handleAdd = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
 
     if (formData.images.length === 0) {
@@ -100,16 +173,24 @@ export default function AddAndEditModal({
 
     const formEl = e.currentTarget;
     const fd = new FormData(formEl);
-    const detailsArr = formData.details
-      .map((detail) => detail.content)
-      .filter(Boolean);
-    const colorsArr = formData.colors
-      .map((color) => color.content)
-      .filter(Boolean);
 
-    formData.images.forEach((img) => fd.append("images", img.file));
-    fd.append("details", JSON.stringify(detailsArr));
-    fd.append("colors", JSON.stringify(colorsArr));
+    formData.details.forEach((detail) => {
+      if (detail.content.trim()) {
+        fd.append("details[]", detail.content);
+      }
+    });
+
+    formData.colors.forEach((color) => {
+      if (color.content.trim()) {
+        fd.append("colors[]", color.content);
+      }
+    });
+
+    formData.images.forEach((img) => {
+      if (img.file instanceof File && img.file.size > 0) {
+        fd.append("images", img.file);
+      }
+    });
 
     try {
       await axios.post(`${BASE_URL}/api/products`, fd, {
@@ -120,8 +201,8 @@ export default function AddAndEditModal({
       setFormData((prev) => ({
         ...prev,
         images: [],
-        details: [{ id: 1, content: "" }],
-        colors: [{ id: 1, content: "" }],
+        details: [{ id: Date.now(), content: "" }],
+        colors: [{ id: Date.now(), content: "" }],
       }));
       setSelectedCategory(null);
       setShouldRefetch((prev) => !prev);
@@ -132,7 +213,71 @@ export default function AddAndEditModal({
     }
   };
 
+  const handleEdit = async (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+
+    if (formData.images.length === 0) {
+      toast.error(ModalLocalization.noImages);
+      return;
+    }
+
+    const fd = new FormData();
+
+    fd.append("name", formData.name);
+    fd.append("brand", formData.brand);
+    fd.append("quantity", formData.quantity);
+    fd.append("price", formData.price);
+    fd.append("discount", formData.discount || "0");
+    fd.append("description", formData.description);
+    fd.append("category", formData.category);
+    fd.append("subcategory", formData.subcategory);
+
+    formData.details.forEach((detail) => {
+      if (detail.content.trim()) {
+        fd.append("details[]", detail.content);
+      }
+    });
+
+    formData.colors.forEach((color) => {
+      if (color.content.trim()) {
+        fd.append("colors[]", color.content);
+      }
+    });
+
+    formData.images.forEach((img) => {
+      if (img.file instanceof File && img.file.size > 0) {
+        fd.append("images", img.file);
+      }
+    });
+
+    try {
+      await axios.patch(`${BASE_URL}/api/products/${data?._id}`, fd, {
+        headers: { "Content-Type": "multipart/form-data" },
+      });
+      toast.success(ModalLocalization.editSuccess);
+      setShouldRefetch((prev) => !prev);
+      onClose();
+    } catch (err: any) {
+      toast.error(err.response?.data?.message || "❌ خطا در ویرایش محصول");
+      console.error(err);
+    }
+  };
+
+  useEffect(() => {
+    if (!isModalOpen) {
+      setFormData((prev) => ({
+        ...prev,
+        details: [{ id: Date.now(), content: "" }],
+        colors: [{ id: Date.now(), content: "" }],
+        images: [],
+      }));
+      setSelectedCategory(null);
+      setSelectedSubCategory(null);
+    }
+  }, [isModalOpen]);
+
   if (!isModalOpen) return null;
+
   return (
     <div className="flex justify-center items-center w-full h-full absolute top-0 left-0">
       <div className="w-full h-full backdrop-blur-[1px] absolute top-0 left-0 brightness-[0.8]"></div>
@@ -140,155 +285,88 @@ export default function AddAndEditModal({
         <form
           className="w-full h-full relative grid grid-rows-8 grid-cols-5 gap-x-5 gap-y-5 px-5 py-8 border border-gray-300 rounded-xl shadow"
           style={{ scrollbarWidth: "none", msOverflowStyle: "none" }}
-          onSubmit={handelSubmit}
+          onSubmit={data ? handleEdit : handleAdd}
         >
-          <div className="col-span-5 row-start-1 row-end-3">
-            <ImageInput
-              images={formData.images}
-              setImages={(newImages) =>
+          <ProductImagesUpload
+            images={formData.images}
+            onImagesChange={(newImages) =>
+              setFormData((prev) => ({ ...prev, images: newImages }))
+            }
+          />
+
+          <ProductFormFields
+            formData={formData}
+            selectedCategory={selectedCategory}
+            selectedSubCategory={selectedSubCategory}
+            filteredSubCategories={filteredSubCategories}
+            onFieldChange={(field, value) =>
+              setFormData((prev) => ({ ...prev, [field]: value }))
+            }
+            onCategoryChange={(value) => {
+              setSelectedCategory(value);
+              setFormData((prev) => ({ ...prev, category: value }));
+            }}
+            onSubCategoryChange={(value) => {
+              setSelectedSubCategory(value);
+              setFormData((prev) => ({ ...prev, subcategory: value }));
+            }}
+          />
+
+          <ProductColorsList
+            colors={formData.colors}
+            onAddColor={() =>
+              setFormData((prev) => ({
+                ...prev,
+                colors: [...prev.colors, { id: Date.now(), content: "" }],
+              }))
+            }
+            onRemoveColor={(id) => {
+              if (formData.colors.length > 1) {
                 setFormData((prev) => ({
                   ...prev,
-                  images: Array.isArray(newImages)
-                    ? newImages
-                    : newImages(prev.images),
-                }))
+                  colors: prev.colors.filter((color) => color.id !== id),
+                }));
+              } else {
+                toast.error("حداقل یک رنگ باید وجود داشته باشد");
               }
-            />
-          </div>
-          <InputForm
-            label={ModalLocalization.name}
-            className="col-span-1 row-start-3 pt-1 justify-self-center"
-            name="name"
-            type="text"
+            }}
+            onUpdateColor={(id, content) =>
+              setFormData((prev) => ({
+                ...prev,
+                colors: prev.colors.map((color) =>
+                  color.id === id ? { ...color, content } : color
+                ),
+              }))
+            }
           />
-          <InputForm
-            label={ModalLocalization.brand}
-            className="col-span-1 row-start-4 col-start-1 justify-self-center"
-            name="brand"
-            type="text"
-          />
-          <InputForm
-            label={ModalLocalization.quantity}
-            className="col-span-1 row-start-5 col-start-1 justify-self-center"
-            name="quantity"
-            type="text"
-          />
-          <InputForm
-            label={ModalLocalization.price}
-            className="col-span-1 row-start-6 col-start-1 justify-self-center"
-            name="price"
-            type="text"
-          />
-          <div className="flex flex-col overflow-y-auto pt-1 gap-7 col-span-1 row-span-5 row-start-3 col-start-2 items-center scrollbar-thin scrollbar-none">
-            <p className="absolute top-44 right-[24%]">
-              {ModalLocalization.colors}
-            </p>
-            {formData.colors.map((item) => (
-              <div key={item.id} className="flex gap-1 relative">
-                <InputForm label="" name="colors" type="text" />
-                <button
-                  type="button"
-                  className="p-2 text-red-500 hover:text-red-700 transition-colors rounded-full hover:bg-red-50 absolute top-[5px] left-1"
-                  onClick={() =>
-                    setFormData((prev) => ({
-                      ...prev,
-                      colors: prev.colors.filter((c) => c.id !== item.id),
-                    }))
-                  }
-                >
-                  <svg
-                    className="w-5 h-5"
-                    fill="none"
-                    stroke="currentColor"
-                    viewBox="0 0 24 24"
-                  >
-                    <path
-                      strokeLinecap="round"
-                      strokeLinejoin="round"
-                      strokeWidth={2}
-                      d="M6 18L18 6M6 6l12 12"
-                    />
-                  </svg>
-                </button>
-              </div>
-            ))}
-            <button
-              type="button"
-              className="bg-blue-500 text-white px-4 min-h-10 rounded-md hover:bg-blue-700 transition-all duration-300"
-              onClick={() =>
+
+          <ProductDetailsList
+            details={formData.details}
+            onAddDetail={() =>
+              setFormData((prev) => ({
+                ...prev,
+                details: [...prev.details, { id: Date.now(), content: "" }],
+              }))
+            }
+            onRemoveDetail={(id) => {
+              if (formData.details.length > 1) {
                 setFormData((prev) => ({
                   ...prev,
-                  colors: [...prev.colors, { id: Date.now(), content: "" }],
-                }))
+                  details: prev.details.filter((detail) => detail.id !== id),
+                }));
+              } else {
+                toast.error("حداقل یک جزئیات باید وجود داشته باشد");
               }
-            >
-              {ModalLocalization.addColor}
-            </button>
-          </div>
-          <InputForm
-            label={ModalLocalization.description}
-            className="col-span-2 row-span-2 row-start-3 col-start-3 pt-1"
-            name="description"
-            type="textarea"
+            }}
+            onUpdateDetail={(id, content) =>
+              setFormData((prev) => ({
+                ...prev,
+                details: prev.details.map((detail) =>
+                  detail.id === id ? { ...detail, content } : detail
+                ),
+              }))
+            }
           />
-          <ModalSelectOption
-            className="col-span-2 row-start-5 col-start-3"
-            name="category"
-            options={formData.categories}
-            setSelectedCategory={setSelectedCategory}
-          />
-          <ModalSelectOption
-            className="col-span-2 row-start-6 col-start-3"
-            name="subcategory"
-            options={filteredSubCategories}
-            disabled={!selectedCategory}
-          />
-          <div className="w-full flex flex-col overflow-y-auto pt-1 gap-7 col-span-1 row-span-5 row-start-3 col-start-5 items-center scrollbar-thin scrollbar-none">
-            <p className="absolute top-44 left-[13%]">
-              {ModalLocalization.details}
-            </p>
-            {formData.details.map((item) => (
-              <div key={item.id} className="flex items-center gap-1 relative">
-                <InputForm label="" name="details" type="textarea" />
-                <button
-                  type="button"
-                  className=" text-red-500 bg-red-100 hover:text-red-600 hover:bg-red-50 transition-colors rounded-full absolute top-[0PX] left-[-10PX]"
-                  onClick={() =>
-                    setFormData((prev) => ({
-                      ...prev,
-                      details: prev.details.filter((c) => c.id !== item.id),
-                    }))
-                  }
-                >
-                  <svg
-                    className="w-5 h-5"
-                    fill="none"
-                    stroke="currentColor"
-                    viewBox="0 0 24 24"
-                  >
-                    <path
-                      strokeLinecap="round"
-                      strokeLinejoin="round"
-                      strokeWidth={2}
-                      d="M6 18L18 6M6 6l12 12"
-                    />
-                  </svg>
-                </button>
-              </div>
-            ))}
-            <button
-              type="button"
-              className="bg-blue-500 text-white px-4 min-h-10 rounded-md hover:bg-blue-700 transition-all duration-300"
-              onClick={() =>
-                setFormData((prev) => ({
-                  ...prev,
-                  details: [...prev.details, { id: Date.now(), content: "" }],
-                }))
-              }
-            >
-              {ModalLocalization.addInput}
-            </button>
-          </div>
 
           <div className="flex justify-center items-end gap-5 col-span-5 row-start-8">
             <button
@@ -301,7 +379,9 @@ export default function AddAndEditModal({
               className="bg-blue-500 text-white px-4 h-10 rounded-md hover:bg-blue-700 transition-all duration-300"
               type="submit"
             >
-              {ModalLocalization.addProduct}
+              {data
+                ? ModalLocalization.editProduct
+                : ModalLocalization.addProduct}
             </button>
           </div>
         </form>

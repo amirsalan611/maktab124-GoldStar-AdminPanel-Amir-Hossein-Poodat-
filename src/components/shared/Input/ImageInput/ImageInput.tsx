@@ -29,7 +29,7 @@ const ImageInput = ({
       prev.filter((_, index) => index !== indexToRemove)
     );
   };
-
+  console.log(images);
   return (
     <div className="border border-dashed border-gray-400 py-5 px-4 rounded-lg flex items-center justify-start gap-5">
       <label className="cursor-pointer inline-block bg-blue-600 text-white px-4 py-2 rounded min-w-[110px] text-center">
@@ -48,7 +48,11 @@ const ImageInput = ({
           images.map((img: Image, index: number) => (
             <div key={index} className="relative group">
               <img
-                src={img.preview}
+                src={
+                  img.preview.startsWith("blob:")
+                    ? img.preview
+                    : `http://${img.preview}`
+                }
                 alt={`image-${index}`}
                 className="h-16 w-full object-cover rounded"
               />
