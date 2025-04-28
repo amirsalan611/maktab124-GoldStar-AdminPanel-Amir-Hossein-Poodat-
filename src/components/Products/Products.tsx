@@ -35,6 +35,9 @@ export default function Products() {
 
   const { shouldRefetch, setShouldRefetch } = useTableContext();
   const [isModalOpen, setIsModalOpen] = useState(false);
+  const [selectedProductId, setSelectedProductId] = useState<string | null>(
+    null
+  );
 
   const [allProducts, setAllProducts] = useState<any[]>([]);
   const [searchText, setSearchText] = useState("");
@@ -114,7 +117,6 @@ export default function Products() {
   };
 
   const handleDelete = async (productId: string) => {
-    console.log(productId);
     Swal.fire({
       title: productPageLocalization.confirmDelete,
       text: productPageLocalization.confirmDeleteAlert,
@@ -145,8 +147,7 @@ export default function Products() {
       },
     }).then(async (result) => {
       if (result.isConfirmed) {
-        const result = await DeleteProduct(productId);
-        console.log(result);
+        const resoult = await DeleteProduct(productId);
         setShouldRefetch(!shouldRefetch);
         Swal.fire({
           title: productPageLocalization.deleteSuccess,
@@ -175,7 +176,10 @@ export default function Products() {
     });
   };
 
-  const handleEdit = () => {};
+  const handleEdit = (productId: string) => {
+    setIsModalOpen(true);
+    setSelectedProductId(productId);
+  };
 
   if (handlePage.loading) {
     return (
@@ -230,7 +234,15 @@ export default function Products() {
       </div>
       <AddAndEditModal
         isModalOpen={isModalOpen}
-        onClose={() => setIsModalOpen(false)}
+        onClose={() => {
+          setIsModalOpen(false);
+          setSelectedProductId(null);
+        }}
+        data={
+          selectedProductId
+            ? allProducts.find((p) => p._id === selectedProductId)
+            : undefined
+        }
       />
     </div>
   );

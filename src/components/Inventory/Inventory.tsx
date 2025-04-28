@@ -6,11 +6,10 @@ import {
   productPageLocalization,
 } from "../../constants/Localization/Localization";
 import MainTable from "../shared/Table/MainTable";
-import {
-  useTableContext,
-} from "../shared/Table/tableContext/tableContext";
+import { useTableContext } from "../shared/Table/tableContext/tableContext";
 import Swal from "sweetalert2";
 import { DeleteProduct } from "../../services/auth/DeleteProduct/DeleteProduct";
+import AddAndEditModal from "../ui/Add&EditModal/Add&EditModal";
 
 interface Column {
   key: string;
@@ -37,6 +36,10 @@ export default function Inventory() {
 
   const [allProducts, setAllProducts] = useState<any[]>([]);
   const [searchValue, setSearchValue] = useState("");
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [selectedProductId, setSelectedProductId] = useState<string | null>(
+    null
+  );
 
   const [handlePage, setHandelPage] = useState({
     loading: true,
@@ -138,8 +141,12 @@ export default function Inventory() {
         });
       }
     });
-  };  
-  const handleedit = () => {};
+  };
+
+  const handleEdit = (productId: string) => {
+    setIsModalOpen(true);
+    setSelectedProductId(productId);
+  };
 
   if (handlePage.loading) {
     return (
@@ -172,9 +179,21 @@ export default function Inventory() {
           data={tableData.products}
           columns={tableData.columns}
           onDelete={handleDelete}
-          onEdit={handleedit}
+          onEdit={handleEdit}
         />
       </div>
+      <AddAndEditModal
+        isModalOpen={isModalOpen}
+        onClose={() => {
+          setIsModalOpen(false);
+          setSelectedProductId(null);
+        }}
+        data={
+          selectedProductId
+            ? allProducts.find((p) => p._id === selectedProductId)
+            : undefined
+        }
+      />
     </div>
   );
 }
