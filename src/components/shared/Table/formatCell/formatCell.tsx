@@ -44,7 +44,7 @@ const formatCell = ({ row, keyName, onDelete, onEdit }: FormatCellProps) => {
             <MdDeleteForever color="red" />
           </IconButton>
           <IconButton onClick={() => onEdit(row._id)}>
-            <MdEditSquare color="blue" />
+            <MdEditSquare color="#3b82f6" />
           </IconButton>
         </div>
       );

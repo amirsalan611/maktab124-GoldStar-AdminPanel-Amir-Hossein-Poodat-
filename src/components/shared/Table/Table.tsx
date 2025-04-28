@@ -18,6 +18,7 @@ import {
   usersLocalization,
 } from "../../../constants/Localization/Localization";
 import moment from "moment-jalaali";
+import AddAndEditModal from "../../ui/Add&EditModal/Add&EditModal";
 
 interface Column {
   key: string;
@@ -104,6 +105,8 @@ export default function MuiTable({
 }: TableProps) {
   const [page, setPage] = React.useState(0);
   const [rowsPerPage, setRowsPerPage] = React.useState(10);
+  const [isModalOpen, setIsModalOpen] = React.useState(false);
+  const [editData, setEditData] = React.useState<any>(null);
 
   const handleChangePage = (_: unknown, newPage: number) => {
     setPage(newPage);
@@ -116,132 +119,149 @@ export default function MuiTable({
     setPage(0);
   };
 
+  const handleEdit = (row: any) => {
+    setEditData(row);
+    setIsModalOpen(true);
+  };
+
+  const handleCloseModal = () => {
+    setIsModalOpen(false);
+    setEditData(null);
+  };
+
   return (
-    <Paper
-      sx={{
-        width: "100%",
-        overflow: "hidden",
-        borderRadius: "20px",
-        border: "1px solid #ccc",
-      }}
-    >
-      <TableContainer sx={{ maxHeight: 640 }}>
-        <Table stickyHeader className="border-b border-gray-500">
-          <TableHead>
-            <TableRow>
-              <TableCell
-                align="center"
-                className="w-1 border-[1px] border-t-0 border-gray-500"
-                style={{
-                  backgroundColor: "#690B22",
-                  color: "white",
-                }}
-              ></TableCell>
-              {columns.map((column) => (
+    <>
+      <Paper
+        sx={{
+          width: "100%",
+          overflow: "hidden",
+          borderRadius: "20px",
+          border: "1px solid #ccc",
+        }}
+      >
+        <TableContainer sx={{ maxHeight: 640 }}>
+          <Table stickyHeader className="border-b border-gray-500">
+            <TableHead>
+              <TableRow>
                 <TableCell
-                  className="border-[1px] border-t-0 border-gray-500"
-                  key={column.key}
-                  align={column.align || "center"}
+                  align="center"
+                  className="w-1 border-[1px] border-t-0 border-gray-500"
                   style={{
                     backgroundColor: "#690B22",
                     color: "white",
-                    font: "status-bar",
-                    fontSize: "15px",
                   }}
-                >
-                  {column.label}
-                </TableCell>
-              ))}
-            </TableRow>
-          </TableHead>
-          <TableBody
-            sx={{
-              overflowY: "auto",
-              "&::-webkit-scrollbar": {
-                display: "none",
-              },
-            }}
-          >
-            {data.length === 0 ? (
-              <TableRow>
-                <TableCell colSpan={columns.length + 1} align="center">
-                  {productPageLocalization.noProduct}
-                </TableCell>
+                ></TableCell>
+                {columns.map((column) => (
+                  <TableCell
+                    className="border-[1px] border-t-0 border-gray-500"
+                    key={column.key}
+                    align={column.align || "center"}
+                    style={{
+                      backgroundColor: "#690B22",
+                      color: "white",
+                      font: "status-bar",
+                      fontSize: "15px",
+                    }}
+                  >
+                    {column.label}
+                  </TableCell>
+                ))}
               </TableRow>
-            ) : (
-              data
-                .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
-                .map((row, rowIndex) => {
-                  const rowBgColor =
-                    row.deliveryStatus === true || row.quantity === 0
-                      ? "#fee2e2"
-                      : row.deliveryStatus === false
-                      ? "#dcfce7"
-                      : "inherit";
+            </TableHead>
+            <TableBody
+              sx={{
+                overflowY: "auto",
+                "&::-webkit-scrollbar": {
+                  display: "none",
+                },
+              }}
+            >
+              {data.length === 0 ? (
+                <TableRow>
+                  <TableCell colSpan={columns.length + 1} align="center">
+                    {productPageLocalization.noProduct}
+                  </TableCell>
+                </TableRow>
+              ) : (
+                data
+                  .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
+                  .map((row, rowIndex) => {
+                    const rowBgColor =
+                      row.deliveryStatus === true || row.quantity === 0
+                        ? "#fee2e2"
+                        : row.deliveryStatus === false
+                        ? "#dcfce7"
+                        : "inherit";
 
-                  return (
-                    <TableRow
-                      hover
-                      key={row.id || rowIndex}
-                      sx={{ backgroundColor: rowBgColor }}
-                    >
-                      <TableCell
-                        align="center"
-                        className="border-[1px] border-gray-500"
-                        sx={{
-                          padding: 1,
-                        }}
+                    return (
+                      <TableRow
+                        hover
+                        key={row.id || rowIndex}
+                        sx={{ backgroundColor: rowBgColor }}
                       >
-                        {page * rowsPerPage + rowIndex + 1}
-                      </TableCell>
-                      {columns.map((column) => (
                         <TableCell
+                          align="center"
                           className="border-[1px] border-gray-500"
-                          key={column.key}
-                          align={column.align || "center"}
                           sx={{
                             padding: 1,
-                            font: "status-bar",
-                            fontSize: "15px",
                           }}
                         >
-                          {formatCell(row, column.key, onDelete, onEdit)}
+                          {page * rowsPerPage + rowIndex + 1}
                         </TableCell>
-                      ))}
-                    </TableRow>
-                  );
-                })
-            )}
-          </TableBody>
-        </Table>
-      </TableContainer>
-      <TablePagination
-        dir="ltr"
-        rowsPerPageOptions={[10, 25, 100]}
-        component="div"
-        count={data.length}
-        rowsPerPage={rowsPerPage}
-        page={page}
-        onPageChange={handleChangePage}
-        onRowsPerPageChange={handleChangeRowsPerPage}
-        labelRowsPerPage={tableLocalization.rowsPerPage}
-        labelDisplayedRows={({ from, to, count }) =>
-          `${from}${tableLocalization.to}${to} ${tableLocalization.of} ${
-            count !== -1 ? count : `${tableLocalization.moreOf} ${to}`
-          }`
-        }
-        sx={{
-          "& .MuiTablePagination-displayedRows": {
-            direction: "rtl",
-          },
-        }}
-        classes={{
-          root: "flex justify-center",
-          toolbar: "flex justify-between",
-          displayedRows: "",
-          select: "border border-gray-300 rounded-md",
-        }}
+                        {columns.map((column) => (
+                          <TableCell
+                            className="border-[1px] border-gray-500"
+                            key={column.key}
+                            align={column.align || "center"}
+                            sx={{
+                              padding: 1,
+                              font: "status-bar",
+                              fontSize: "15px",
+                            }}
+                          >
+                            {formatCell(row, column.key, onDelete, onEdit)}
+                          </TableCell>
+                        ))}
+                      </TableRow>
+                    );
+                  })
+              )}
+            </TableBody>
+          </Table>
+        </TableContainer>
+        <TablePagination
+          dir="ltr"
+          rowsPerPageOptions={[10, 25, 100]}
+          component="div"
+          count={data.length}
+          rowsPerPage={rowsPerPage}
+          page={page}
+          onPageChange={handleChangePage}
+          onRowsPerPageChange={handleChangeRowsPerPage}
+          labelRowsPerPage={tableLocalization.rowsPerPage}
+          labelDisplayedRows={({ from, to, count }) =>
+            `${from}${tableLocalization.to}${to} ${tableLocalization.of} ${
+              count !== -1 ? count : `${tableLocalization.moreOf} ${to}`
+            }`
+          }
+          sx={{
+            "& .MuiTablePagination-displayedRows": {
+              direction: "rtl",
+            },
+          }}
+          classes={{
+            root: "flex justify-center",
+            toolbar: "flex justify-between",
+            displayedRows: "",
+            select: "border border-gray-300 rounded-md",
+          }}
+        />
+      </Paper>
+      <AddAndEditModal
+        isModalOpen={isModalOpen}
+        onClose={handleCloseModal}
+        data={editData}
       />
-    </Paper>
+    </>
   );
 }

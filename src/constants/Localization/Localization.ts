@@ -120,7 +120,7 @@ export const ModalLocalization = {
   description: "توضیحات",
   images: "تصاویر",
   details: "جزئیات",
-  discount: "تخفیف",
+  discount: "درصد تخفیف",
   addProduct: "افزودن محصول",
   exit: "انصراف",
   addImage: "افزودن تصویر",
@@ -162,4 +162,6 @@ export const ModalLocalization = {
   colors: "رنگ ها",
   addColor: "افزودن رنگ",
   succes: "محصول با موفقیت اضافه شد",
+  editSuccess: "محصول با موفقیت ویرایش شد",
+  editProduct: "ویرایش محصول",
 };

@@ -129,7 +129,7 @@ const handleSaveChanges = async () => {
       />
       {isEditing && (
         <button
-          className="bg-green-400 px-3 py-2 absolute left-5 bottom-1.5 rounded-md font-sans"
+          className="bg-blue-500 text-white px-3 py-2 absolute left-5 bottom-1.5 rounded-md font-sans"
           onClick={handleSaveChanges}
         >
           {tableLocalization.saveChanges}

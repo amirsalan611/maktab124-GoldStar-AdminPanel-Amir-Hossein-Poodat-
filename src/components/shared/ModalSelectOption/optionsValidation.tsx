@@ -5,9 +5,25 @@ interface Option {
   name: string;
 }
 
-export default function OptionsValidation({ options }: { options: Option[] }) {
+export default function OptionsValidation({
+  options,
+  selectedCategory,
+  selectedSubCategory,
+}: {
+  options: Option[];
+  selectedCategory?: string | null;
+  selectedSubCategory?: string | null;
+}) {
+  console.log(selectedCategory);
+  console.log(selectedSubCategory);
   return options.map((option: Option, index: number) => (
-    <option key={index} value={option._id}>
+    <option
+      key={index}
+      value={option._id}
+      selected={
+        selectedCategory === option._id || selectedSubCategory === option._id
+      }
+    >
       {option.name === "Sanitary"
         ? ModalLocalization.sanitary
         : option.name === "Cosmetics"
