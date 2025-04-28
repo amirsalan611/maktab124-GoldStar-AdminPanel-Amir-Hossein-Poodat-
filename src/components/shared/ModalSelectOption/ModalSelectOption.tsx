@@ -21,16 +21,22 @@ interface ModalSelectOptionProps {
   setSelectedCategory?: (category: string) => void;
   setSelectedSubCategory?: (subCategory: string) => void;
   disabled?: boolean;
+  selectedCategory?: string | null;
+  selectedSubCategory?: string | null;
 }
 
 export default function ModalSelectOption({
   className,
   name,
   options,
+  selectedCategory,
+  selectedSubCategory,
   setSelectedCategory,
   setSelectedSubCategory,
   disabled,
 }: ModalSelectOptionProps) {
+    console.log(selectedCategory);
+    console.log(selectedSubCategory);
   return (
     <StyledWrapper className={className}>
       <div
@@ -58,12 +64,16 @@ export default function ModalSelectOption({
             }
           }}
         >
-          <option value="" disabled hidden selected>
+          <option value="" disabled hidden selected={!selectedCategory}>
             {name === "category"
               ? ModalLocalization.selectCategory
               : ModalLocalization.selectSubCategory}
           </option>
-          {OptionsValidation({ options })}
+          {OptionsValidation({
+            options,
+            selectedCategory,
+            selectedSubCategory,
+          })}
         </select>
       </div>
     </StyledWrapper>
