@@ -221,7 +221,7 @@ export default function Products() {
           <Button
             buttonText={productPageLocalization.addProduct}
             type={"button"}
-            buttonClassName="border border-primary w-full p-2 text-primary hover:border-none hover:bg-primary font-sans "
+            buttonClassName="border border-primary w-full p-2 text-primary hover:border-none hover:bg-primary"
             onClick={() => setIsModalOpen(true)}
           />
         </div>

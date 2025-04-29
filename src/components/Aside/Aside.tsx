@@ -1,6 +1,9 @@
 import { useContext, useEffect, useState } from "react";
 import AsideContext from "../Context/Context";
-import { asidebarlocalization, headerLocalization } from "../../constants/Localization/Localization";
+import {
+  asidebarlocalization,
+  headerLocalization,
+} from "../../constants/Localization/Localization";
 import { AiFillProduct } from "react-icons/ai";
 import { useNavigate } from "react-router-dom";
 import { BiSolidMessageDetail } from "react-icons/bi";
@@ -22,43 +25,42 @@ export default function Aside() {
   const asideContext = useContext(AsideContext);
 
   const { activeComponent, setActiveComponent }: any = asideContext;
-  
-    const [adminData, setAdminData] = useState<any>(null);
-    const [loading, setLoading] = useState(true);
-    const [error, setError] = useState(false);
-    
 
-    useEffect(() => {
-      try {
-        const getAdminData = JSON.parse(
-          localStorage.getItem("adminData") || "{}"
-        );
-        setAdminData(getAdminData);
-        setLoading(false);
-      } catch (error) {
-        setError(true);
-        console.log(error);
-      } finally {
-        setLoading(false);
-      }
-    }, []);
+  const [adminData, setAdminData] = useState<any>(null);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(false);
 
-    if (loading)
-      return (
-        <div className="p-5 bg-gray-100 shadow-sm w-full ">
-          <Loader />
-        </div>
+  useEffect(() => {
+    try {
+      const getAdminData = JSON.parse(
+        localStorage.getItem("adminData") || "{}"
       );
-    if (error)
-      return (
-        <div className=" bg-gray-100 shadow-sm w-full">
-          <img src={warning} alt="warning" className="w-32 py-2 m-auto" />
-          <p className="text-center">{headerLocalization.warning}</p>
-        </div>
-      );
+      setAdminData(getAdminData);
+      setLoading(false);
+    } catch (error) {
+      setError(true);
+      console.log(error);
+    } finally {
+      setLoading(false);
+    }
+  }, []);
+
+  if (loading)
+    return (
+      <div className="p-5 bg-gray-100 shadow-sm w-full ">
+        <Loader />
+      </div>
+    );
+  if (error)
+    return (
+      <div className=" bg-gray-100 shadow-sm w-full">
+        <img src={warning} alt="warning" className="w-32 py-2 m-auto" />
+        <p className="text-center">{headerLocalization.warning}</p>
+      </div>
+    );
 
   return (
-    <div className="h-screen bg-primary text-white shadow-xl p-10 flex flex-col justify-between w-[300px] font-sans">
+    <div className="h-screen bg-primary text-white shadow-xl p-10 flex flex-col justify-between w-[300px]">
       <div dir="ltr" className="p-5 flex gap-2 self-end shadow-b-xl w-full">
         <div className="w-14 h-14 border border-black rounded-full overflow-hidden">
           <img src={adminPhoto} alt="profile picture" />

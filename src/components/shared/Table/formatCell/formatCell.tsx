@@ -16,6 +16,11 @@ interface FormatCellProps {
 }
 
 const formatCell = ({ row, keyName, onDelete, onEdit }: FormatCellProps) => {
+  const toPersianNumber = (num: number | string) => {
+    return num
+      .toLocaleString("en-US")
+      .replace(/\d/g, (d) => "۰۱۲۳۴۵۶۷۸۹"[parseInt(d)]);
+  };
   const {
     productsOnEdit,
     setProductsOnEdit,
@@ -85,7 +90,7 @@ const formatCell = ({ row, keyName, onDelete, onEdit }: FormatCellProps) => {
             </>
           ) : (
             <p>
-              {row[keyName].toLocaleString()} {productPageLocalization.toman}
+              {toPersianNumber(row[keyName])} {productPageLocalization.toman}
             </p>
           )}
         </span>
@@ -93,7 +98,7 @@ const formatCell = ({ row, keyName, onDelete, onEdit }: FormatCellProps) => {
     case "totalPrice":
       return (
         <span>
-          {row[keyName].toLocaleString()} {productPageLocalization.toman}
+          {toPersianNumber(row[keyName])} {productPageLocalization.toman}
         </span>
       );
     case "status":
@@ -117,9 +122,7 @@ const formatCell = ({ row, keyName, onDelete, onEdit }: FormatCellProps) => {
 
     case "quantity":
       const id = row._id || row._id;
-      const productInEdit = productsOnEdit.find(
-        (p) => p.id === id
-      );
+      const productInEdit = productsOnEdit.find((p) => p.id === id);
 
       return (
         <span
@@ -149,7 +152,7 @@ const formatCell = ({ row, keyName, onDelete, onEdit }: FormatCellProps) => {
               className="border bg-red-300 px-3 text-center py-1 rounded w-20"
             />
           ) : (
-            <p>{row.quantity}</p>
+            <p>{toPersianNumber(row.quantity)}</p>
           )}
         </span>
       );

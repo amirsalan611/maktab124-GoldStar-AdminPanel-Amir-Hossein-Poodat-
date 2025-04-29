@@ -172,8 +172,8 @@ export default function Inventory() {
             value={searchValue}
             onChange={(e) => handleSearch(e.target.value)}
             className="border w-[350px] border-gray-400 outline-none rounded-md my-5 py-2 px-5"
-            placeholder="search by product name"
-          />
+            placeholder={inventoryLocalization.searchByProductName}
+            />
         </div>
         <MainTable
           data={tableData.products}

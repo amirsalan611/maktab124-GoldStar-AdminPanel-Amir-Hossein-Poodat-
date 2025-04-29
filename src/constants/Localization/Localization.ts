@@ -56,6 +56,7 @@ export const productPageLocalization = {
 
 export const inventoryLocalization = {
   inventory: "لیست موجودی",
+  searchByProductName: "جستجو بر اساس نام محصول",
 };
 
 export const ordersLocalization = {
@@ -99,6 +100,7 @@ export const usersLocalization = {
   delete: "حذف",
   cancel: "انصراف",
   ok: "تایید",
+  searchByUsername: "جستجو بر اساس نام کاربری",
 };
 
 export const tableLocalization = {

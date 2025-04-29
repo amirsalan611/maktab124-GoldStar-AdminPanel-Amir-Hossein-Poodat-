@@ -54,37 +54,39 @@ const MainTable: React.FC<MainTableProps> = ({
     setPage(0);
   };
 
-const handleSaveChanges = async () => {
-  const editedProducts = productsOnEdit.concat(productsPriceOnEdit);
+  const handleSaveChanges = async () => {
+    const editedProducts = productsOnEdit.concat(productsPriceOnEdit);
 
-  try {
-    await Promise.all(
-      editedProducts.map((product) => {
-        const bodyData: any = {};
-        if (product.quantityValue !== undefined) {
-          bodyData.quantity = product.quantityValue;
-        }
-        if (product.priceValue !== undefined) {
-          bodyData.price = product.priceValue;
-        }
+    try {
+      await Promise.all(
+        editedProducts.map((product) => {
+          const bodyData: any = {};
+          if (product.quantityValue !== undefined) {
+            bodyData.quantity = product.quantityValue;
+          }
+          if (product.priceValue !== undefined) {
+            bodyData.price = product.priceValue;
+          }
 
-        return axios.patch(`${BASE_URL}/api/products/${product.id}`, bodyData);
-      })
-    );
+          return axios.patch(
+            `${BASE_URL}/api/products/${product.id}`,
+            bodyData
+          );
+        })
+      );
 
-    toast.success(tableLocalization.saveSucces);
-    setProductsOnEdit([]);
-    setIsEditing(false);
-    setRowInEditId([]);
-    setProductsPriceOnEdit([]);
-    setIsPriceEditing(false);
-    setRowPriceInEditId([]);
-    setShouldRefetch((prev) => !prev);
-  } catch (error) {
-    toast.error(tableLocalization.saveError);
-  }
-};
-
+      toast.success(tableLocalization.saveSucces);
+      setProductsOnEdit([]);
+      setIsEditing(false);
+      setRowInEditId([]);
+      setProductsPriceOnEdit([]);
+      setIsPriceEditing(false);
+      setRowPriceInEditId([]);
+      setShouldRefetch((prev) => !prev);
+    } catch (error) {
+      toast.error(tableLocalization.saveError);
+    }
+  };
 
   return (
     <Paper
@@ -129,7 +131,7 @@ const handleSaveChanges = async () => {
       />
       {isEditing && (
         <button
-          className="bg-blue-500 text-white px-3 py-2 absolute left-5 bottom-1.5 rounded-md font-sans"
+          className="bg-blue-500 text-white px-3 py-2 absolute left-5 bottom-1.5 rounded-md"
           onClick={handleSaveChanges}
         >
           {tableLocalization.saveChanges}

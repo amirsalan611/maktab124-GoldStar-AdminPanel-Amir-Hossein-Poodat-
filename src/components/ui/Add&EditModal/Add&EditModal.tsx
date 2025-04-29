@@ -172,7 +172,7 @@ export default function AddAndEditModal({
     }
 
     const formEl = e.currentTarget;
-    const fd = new FormData(formEl);
+    const fd = new FormData();
 
     formData.details.forEach((detail) => {
       if (detail.content.trim()) {
@@ -185,6 +185,15 @@ export default function AddAndEditModal({
         fd.append("colors[]", color.content);
       }
     });
+
+    fd.append("name", formData.name);
+    fd.append("brand", formData.brand);
+    fd.append("quantity", formData.quantity);
+    fd.append("price", formData.price);
+    fd.append("discount", formData.discount || "0");
+    fd.append("description", formData.description);
+    fd.append("category", formEl.category.value);
+    fd.append("subcategory", formEl.subcategory.value);
 
     formData.images.forEach((img) => {
       if (img.file instanceof File && img.file.size > 0) {
@@ -205,6 +214,21 @@ export default function AddAndEditModal({
         colors: [{ id: Date.now(), content: "" }],
       }));
       setSelectedCategory(null);
+      setFormData((prev) => ({
+        ...prev,
+        name: "",
+        brand: "",
+        quantity: "",
+        price: "",
+        discount: "",
+        description: "",
+        category: "",
+        subcategory: "",
+
+        images: [],
+        details: [{ id: Date.now(), content: "" }],
+        colors: [{ id: Date.now(), content: "" }],
+      }));
       setShouldRefetch((prev) => !prev);
       onClose();
     } catch (err: any) {
@@ -256,6 +280,20 @@ export default function AddAndEditModal({
       });
       toast.success(ModalLocalization.editSuccess);
       setShouldRefetch((prev) => !prev);
+      setFormData((prev) => ({
+        ...prev,
+        name: "",
+        brand: "",
+        quantity: "",
+        price: "",
+        discount: "",
+        description: "",
+        category: "",
+        subcategory: "",
+        images: [],
+        details: [{ id: Date.now(), content: "" }],
+        colors: [{ id: Date.now(), content: "" }],
+      }));
       onClose();
     } catch (err: any) {
       toast.error(err.response?.data?.message || "❌ خطا در ویرایش محصول");
