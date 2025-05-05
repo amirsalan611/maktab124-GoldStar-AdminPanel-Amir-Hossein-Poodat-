@@ -26,7 +26,7 @@ export default function Users() {
       { key: "lastname", label: usersLocalization.lastName },
       { key: "phoneNumber", label: usersLocalization.phoneNumber },
       { key: "role", label: usersLocalization.role },
-      { key: "action", label: usersLocalization.action },
+      { key: "userAction", label: usersLocalization.action },
     ],
   });
 
