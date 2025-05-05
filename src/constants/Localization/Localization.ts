@@ -167,3 +167,32 @@ export const ModalLocalization = {
   editSuccess: "محصول با موفقیت ویرایش شد",
   editProduct: "ویرایش محصول",
 };
+
+export const orderPageLocalization = {
+  editOrder: "آیا از ویرایش وضعیت ارسال سفارش اطمینان دارید؟",
+  editOrderAlertSend: " با پذیرش ، وضعیت ارسال به سفارش ارسال شده تغییر خواهد کرد",
+  editOrderAlertNotSend: " با پذیرش ، وضعیت ارسال به سفارش ارسال نشده تغییر خواهد کرد",
+  editOrderAlertSuccess: "وضعیت ارسال با موفقیت تغییر کرد",
+  yes: "بله ارسال شده",
+  not: "بله ارسال نشده ",
+  cancel: "انصراف",
+  succesTitle: "درخواست ارسال شد",
+  success: "وضعیت ارسال با موفقیت تغییر کرد",
+  error: "خطا در تغییر وضعیت ارسال",
+  errorAlert: "خطا در تغییر وضعیت ارسال، لطفا دوباره تلاش کنید",
+};
+
+export const reviewLocalization = {
+  orderView: "مشاهده سفارش",
+  userName: "نام کاربر :",
+  phoneNumber: "شماره تلفن :",
+  adress: "آدرس :",
+  deliveryDate: "تاریخ ارسال :",
+  deliveryStatus: "وضعیت ارسال :",
+  product: "نام محصول",
+  count: "تعداد",
+  price: "قیمت",
+  color: "رنگ",
+  sent: "ارسال شده",
+  notSent: "ارسال نشده",
+};

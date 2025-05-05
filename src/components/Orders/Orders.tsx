@@ -3,11 +3,11 @@ import { ordersLocalization } from "../../constants/Localization/Localization";
 import { GetOrders } from "../../services/auth/GetOrders/GetOrders";
 import RadioFiltering from "./RadioFiltering/RadioFiltering";
 import MainTable from "../shared/Table/MainTable";
-import {
-  useTableContext,
-} from "../shared/Table/tableContext/tableContext";
+import { useTableContext } from "../shared/Table/tableContext/tableContext";
 import Swal from "sweetalert2";
 import { DeleteOrder } from "../../services/auth/DeleteOrder/DeleteOrder";
+import EditModal from "./editModal/editModal";
+import Review from "./revewe/revewe";
 interface Column {
   key: string;
   label: string;
@@ -52,12 +52,11 @@ export default function Orders() {
       { key: "totalPrice", label: ordersLocalization.totalPrice },
       { key: "deliveryDate", label: ordersLocalization.deliveryDate },
       { key: "deliveryStatus", label: ordersLocalization.deliveryStatus },
-      { key: "action", label: ordersLocalization.action },
+      { key: "orderAction", label: ordersLocalization.action },
     ],
   });
 
   const { shouldRefetch, setShouldRefetch } = useTableContext();
-
   const [allOrders, setAllOrders] = useState<datatype[]>([]);
   const [searchValue, setSearchValue] = useState("");
   const [deliveryFilter, setDeliveryFilter] = useState<
@@ -68,12 +67,13 @@ export default function Orders() {
     loading: true,
     error: false,
   });
+  const [reviewIsOpen, setReviewIsOpen] = useState<boolean>(false);
+  const [orderId, setOrderId] = useState<string>("");
 
   useEffect(() => {
     const fetchGetOrders = async () => {
       try {
         const orders = await GetOrders();
-        console.log(orders);
         setAllOrders(orders);
         setTableData((prev) => ({ ...prev, orders: orders }));
         setHandelPage({ ...handlePage, loading: false });
@@ -114,7 +114,6 @@ export default function Orders() {
   };
 
   const handleDelete = async (productId: string) => {
-    console.log(productId);
     Swal.fire({
       title: ordersLocalization.confirmDelete,
       text: ordersLocalization.confirmDeleteAlert,
@@ -146,7 +145,6 @@ export default function Orders() {
     }).then(async (result) => {
       if (result.isConfirmed) {
         const result = await DeleteOrder(productId);
-        console.log(result);
         setShouldRefetch(!shouldRefetch);
         Swal.fire({
           title: ordersLocalization.deleteSuccess,
@@ -174,7 +172,17 @@ export default function Orders() {
       }
     });
   };
-  const handleedit = () => {};
+  const handleedit = (orderId: string) => {
+    const order = tableData.orders.find((order) => order._id === orderId);
+    if (order) {
+      EditModal(orderId, order.deliveryStatus, setShouldRefetch, shouldRefetch);
+    }
+  };
+
+  const handleClick = (orderId: string) => {
+    setReviewIsOpen(true);
+    setOrderId(orderId);
+  };
 
   return (
     <div className="p-10 pt-2 w-full h-full">
@@ -198,8 +206,10 @@ export default function Orders() {
           columns={tableData.columns}
           onDelete={handleDelete}
           onEdit={handleedit}
+          onClick={handleClick}
         />
       </div>
+      <Review orderId={orderId} reviewIsOpen={reviewIsOpen} setReviewIsOpen={setReviewIsOpen} />
     </div>
   );
 }

@@ -14,6 +14,7 @@ interface TableRowProps {
   page: number;
   rowsPerPage: number;
   rowIndex: number;
+  onClick?: (id: string) => void;
 }
 
 const TableRowC: React.FC<TableRowProps> = ({
@@ -24,16 +25,21 @@ const TableRowC: React.FC<TableRowProps> = ({
   page,
   rowsPerPage,
   rowIndex,
+  onClick,
 }) => {
   const rowBgColor =
-    row.deliveryStatus === true || row.quantity === 0
+    row.deliveryStatus === false || row.quantity === 0
       ? "#fee2e2"
-      : row.deliveryStatus === false
+      : row.deliveryStatus === true
       ? "#dcfce7"
       : "inherit";
 
   return (
-    <TableRow hover sx={{ backgroundColor: rowBgColor }}>
+    <TableRow
+      hover
+      sx={{ backgroundColor: rowBgColor }}
+      onClick={() => onClick && onClick(row._id)}
+    >
       <TableCell
         align="center"
         className="border-[1px] border-gray-500"

@@ -19,6 +19,7 @@ interface MainTableProps {
   }[];
   onDelete: (id: string) => void;
   onEdit: (id: string) => void;
+  onClick?: (id: string) => void;
 }
 
 const MainTable: React.FC<MainTableProps> = ({
@@ -26,6 +27,7 @@ const MainTable: React.FC<MainTableProps> = ({
   columns,
   onDelete,
   onEdit,
+  onClick,
 }) => {
   const [page, setPage] = React.useState(0);
   const [rowsPerPage, setRowsPerPage] = React.useState(10);
@@ -117,6 +119,7 @@ const MainTable: React.FC<MainTableProps> = ({
                   page={page}
                   rowsPerPage={rowsPerPage}
                   rowIndex={rowIndex}
+                  onClick={onClick}
                 />
               ))
           )}

@@ -1,5 +1,6 @@
 import { IconButton } from "@mui/material";
 import { MdDeleteForever, MdEditSquare } from "react-icons/md";
+import { BsFillSendFill } from "react-icons/bs";
 import moment from "moment-jalaali";
 import {
   ordersLocalization,
@@ -50,6 +51,35 @@ const formatCell = ({ row, keyName, onDelete, onEdit }: FormatCellProps) => {
           </IconButton>
           <IconButton onClick={() => onEdit(row._id)}>
             <MdEditSquare color="#3b82f6" />
+          </IconButton>
+        </div>
+      );
+    case "orderAction":
+      return (
+        <div style={{ display: "flex", gap: 8, justifyContent: "center" }}>
+          <IconButton
+            onClick={(e) => {
+              e.stopPropagation();
+              onDelete(row._id);
+            }}
+          >
+            <MdDeleteForever color="red" />
+          </IconButton>
+          <IconButton
+            onClick={(e) => {
+              e.stopPropagation();
+              onEdit(row._id);
+            }}
+          >
+            <BsFillSendFill color="#3b82f6" />
+          </IconButton>
+        </div>
+      );
+    case "userAction":
+      return (
+        <div style={{ display: "flex", gap: 8, justifyContent: "center" }}>
+          <IconButton onClick={() => onDelete(row._id)}>
+            <MdDeleteForever color="red" />
           </IconButton>
         </div>
       );
@@ -113,8 +143,8 @@ const formatCell = ({ row, keyName, onDelete, onEdit }: FormatCellProps) => {
         : usersLocalization.admin;
     case "deliveryStatus":
       return row.deliveryStatus
-        ? ordersLocalization.sending
-        : ordersLocalization.sended;
+        ? ordersLocalization.sended
+        : ordersLocalization.sending;
     case "deliveryDate":
       return row.deliveryDate
         ? moment(row.deliveryDate).locale("fa").format("jYYYY/jMM/jDD")
