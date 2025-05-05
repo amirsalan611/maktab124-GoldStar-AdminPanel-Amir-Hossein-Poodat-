@@ -28,7 +28,6 @@ export default function Inventory() {
       { key: "name", label: productPageLocalization.name },
       { key: "price", label: productPageLocalization.price },
       { key: "quantity", label: productPageLocalization.count },
-      { key: "action", label: productPageLocalization.action },
     ],
   });
 
